@@ -48,17 +48,20 @@ class AlarmaGUI(QtGui.QWidget):         #QWidget #QMainWindow
         # Parámetros constantes:
         self.titulo = 'Scape Room'
         self.thread = ThreadClass(fila)
+        self.video = Phonon.VideoPlayer(self)
         self.thread.start()
         self.connect(self.thread,QtCore.SIGNAL('MOSTRAR_VIDEO_1'),self._mostrarVideo1)
         self.connect(self.thread,QtCore.SIGNAL('MOSTRAR_VIDEO_2'),self._mostrarVideo2)
+        self.connect(self.video,QtCore.SIGNAL("finished()"),self._terminoVideo)
 
-        # Clases auxiliares:
+        # Clases auxiliares: 
         self.initUI()
         # Al inicializarse la clase se muestra:
         if pantallaTotal:
             self.showFullScreen()
         else:
             self.show()
+        #self.displayOverlay()
 
 
     def initUI(self):
@@ -67,8 +70,8 @@ class AlarmaGUI(QtGui.QWidget):         #QWidget #QMainWindow
         """
         # Definición de campos:
         self.stringSolicitudAutentificacion = 'AUTENTIFIQUESE POR FAVOR'
-        self.imagen = QtGui.QLabel(self)
-        self.imagen.setGeometry(150, 150, 250, 250)
+        
+
         self.labelAutentificacion = QtGui.QLabel(self.stringSolicitudAutentificacion)
         self.labelAutentificacion.setFont(QtGui.QFont('SansSerif', 36))
         self.labelIdentificado = QtGui.QLabel('')
@@ -77,18 +80,15 @@ class AlarmaGUI(QtGui.QWidget):         #QWidget #QMainWindow
         # Parte visual
         self.media0 = Phonon.MediaSource('./imagenes/logoWeb.png')
         self.media1 = Phonon.MediaSource('./videos/1.avi')
-        self.video = Phonon.VideoPlayer(self)
+        
         self.video.load(self.media1)
-
         self.media2 = Phonon.MediaSource('./videos/2.avi')
 
-        self.fechaYHora = QtGui.QLabel('Fecha')
+        
         self.estadoAlarma = QtGui.QLabel('Alarma Activada')
-        self.fechaYHora.setGeometry(25, 25, 250, 250)
+        
         self.pixmapAct = QtGui.QPixmap('./imagenes/alarmaActivada.png')
-        self.imagen.setPixmap(self.pixmapAct)
-
-
+        
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self._time)
         self.timer.start(1000)
@@ -97,18 +97,56 @@ class AlarmaGUI(QtGui.QWidget):         #QWidget #QMainWindow
         self.layoutVideo1 = QtGui.QVBoxLayout()
         
         self.layoutVideo1.addWidget(self.video)
-        #self.layoutVideo1.setAlignment(self.imagen, QtCore.Qt.AlignHCenter)
+        self.dataIntroLayout = QtGui.QHBoxLayout()
+        self.passwd = QtGui.QLabel('Contraseña')
+        self.intro = QtGui.QLineEdit('Contraseña')
+        self.intro.setEchoMode(QtGui.QLineEdit.Password)
+        self.dataIntroLayout.addWidget(self.passwd)
+        self.dataIntroLayout.addWidget(self.intro)
+        self.layoutVideo1.addLayout(self.dataIntroLayout)
 
         self.setLayout(self.layoutVideo1)
         self.video.load(self.media0)
         self.video.play()
+        
         self.setMinimumHeight(450)
         
-        self.setGeometry(300, 300, 300, 150)
+        
+        #self.setGeometry(300, 300, 300, 150)
         # Algunas visualizaciones:
         self.setWindowIcon(QtGui.QIcon('./imagenes/logo.png')) 
+        
         self.setWindowTitle(self.titulo)
         
+        
+    def displayOverlay(self):
+        self.popup = QtGui.QDialog(self,QtCore.Qt.WindowStaysOnTopHint)
+        self.popup.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        
+        self.passwd = QtGui.QLabel('Contraseña')
+        #self.passwd.setMinimumWidth(500)
+        self.intro = QtGui.QLineEdit('Contraseña')
+        
+        f = self.intro.font()
+        f.setPointSize(27)
+        self.intro.setFont(f)
+        #self.intro.setMinimumWidth(500)
+        self.intro.setEchoMode(QtGui.QLineEdit.Password)
+        self.intro.updateGeometry()
+        self.miMensaje = QtGui.QHBoxLayout()
+        #self.miMensaje.addWidget(self.passwd)
+        self.miMensaje.addWidget(self.intro)
+        self.popup.setLayout(self.miMensaje)
+        #position_x = (self.frameGeometry().width()-self.popup.frameGeometry().width())/2
+        #position_y = (self.frameGeometry().height()-self.popup.frameGeometry().height())/2
+        resolution = QtGui.QDesktopWidget().screenGeometry()
+        position_x = (resolution.width() / 2) - (self.popup.frameGeometry().width() / 2)
+        position_y = 7/8*((resolution.height()) - (self.popup.frameGeometry().height()))
+
+        self.popup.move(position_x, position_y)
+        #event.accept()
+        self.popup.show() 
+
     def keyPressEvent(self, e):
         """
         Se redefine la interacción con el teclado para que la tecla ESC cierre el GUI
@@ -129,7 +167,6 @@ class AlarmaGUI(QtGui.QWidget):         #QWidget #QMainWindow
         """
         Despliega el video 1
         """
-        print('reproduciendo video 1')
         self.video.load(self.media1)
         self.video.play()
         
@@ -137,8 +174,11 @@ class AlarmaGUI(QtGui.QWidget):         #QWidget #QMainWindow
         """
         Despliega el video 2
         """
-        print('reproduciendo video 2')
         self.video.load(self.media2)
+        self.video.play()
+
+    def _terminoVideo(self):
+        self.video.load(self.media0)
         self.video.play()
 
 class ThreadClass(QtCore.QThread):
@@ -174,14 +214,14 @@ if __name__ == '__main__':
     """
     Este pequeno script demostrativo muestra que la interfaz puede ser creada sin interferir con el programa principal
     """
-    p = GUIParalela(fullScreen=False)
+    p = GUIParalela(fullScreen=True)
     enviandoValores = True
     while enviandoValores:
         sleep(1)
         myInput = str(input('Ingrese Contraseña: '))
-        GUIParalela.myQueue.put(myInput)
         if myInput == '0':
-            enviandoValores = False
+            break
+        GUIParalela.myQueue.put(myInput)
     
     p.process.join() 
 
