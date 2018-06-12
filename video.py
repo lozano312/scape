@@ -109,7 +109,7 @@ class AlarmaGUI(QtGui.QWidget):         #QWidget #QMainWindow
         self.labelIdentificado.setFont(QtGui.QFont('SansSerif', 24))
 
         # Parte visual
-        self.media = Phonon.MediaSource('./videos/or.avi')
+        self.media = Phonon.MediaSource('./videos/ea.mp4')
         self.video = Phonon.VideoPlayer(self)
         self.video.setMinimumSize(320, 240)
         self.video.load(self.media)
