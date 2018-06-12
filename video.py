@@ -80,8 +80,7 @@ class AlarmaGUI(QtGui.QWidget):         #QWidget #QMainWindow
         #super(AlarmaGUI, self).__init__(parent)
         QtGui.QWidget.__init__(self, None, QtCore.Qt.WindowStaysOnTopHint)
         # Parámetros constantes:
-        self.titulo = 'Estado de alarma'
-        self.estado = 'Activado'
+        self.titulo = 'Scape Room'
         self.thread = ThreadClass(fila)
         self.thread.start()
         self.connect(self.thread,QtCore.SIGNAL('ACTUALIZAR_ESTADO'),self._actualizarValor)
@@ -111,10 +110,10 @@ class AlarmaGUI(QtGui.QWidget):         #QWidget #QMainWindow
         # Parte visual
         self.media = Phonon.MediaSource('./videos/ea.mp4')
         self.video = Phonon.VideoPlayer(self)
-        self.video.setMinimumSize(320, 240)
+        #self.video.setMinimumSize(320, 240)
         self.video.load(self.media)
         self.video.play()
-        self.imagenLogo = QtGui.QLabel(self)
+
         self.fechaYHora = QtGui.QLabel('Fecha')
         self.estadoAlarma = QtGui.QLabel('Alarma Activada')
         self.fechaYHora.setGeometry(25, 25, 250, 250)
@@ -122,34 +121,21 @@ class AlarmaGUI(QtGui.QWidget):         #QWidget #QMainWindow
         self.pixmapDeact = QtGui.QPixmap('./imagenes/alarmaDesactivada.png')
         self.pixmapLogo = QtGui.QPixmap('./imagenes/logoWeb.png')
         self.imagen.setPixmap(self.pixmapAct)
-        self.imagenLogo.setPixmap(self.pixmapLogo)
-        self.imagenLogo.setMaximumHeight(30)
-        self.lcd = QtGui.QLCDNumber(self)
-        self.lcd.setDigitCount(19)
-        self.lcd.setMaximumHeight(30)
-        self.lcd.display(strftime("%Y"+"-"+"%m"+"-"+"%d"+" "+"%H"+":"+"%M"+":"+"%S"))
+
+
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self._time)
         self.timer.start(1000)
 
         # Layouts:
-        layoutVertical = QtGui.QVBoxLayout()
-        layoutHorizontalSuperior = QtGui.QHBoxLayout()
-
-        # Agregar Widgets
-        layoutHorizontalSuperior.addWidget(self.imagenLogo)
-        #layoutHorizontalSuperior.addWidget(self.timer)
-        layoutHorizontalSuperior.addWidget(self.lcd)
-        layoutVertical.addLayout(layoutHorizontalSuperior)
-        layoutVertical.addWidget(self.imagen)
-        layoutVertical.addWidget(self.video)
-        layoutVertical.addWidget(self.labelIdentificado)
-        layoutVertical.setAlignment(self.imagen, QtCore.Qt.AlignHCenter)
-        layoutVertical.setAlignment(self.labelAutentificacion, QtCore.Qt.AlignHCenter)
-        layoutVertical.setAlignment(self.labelIdentificado, QtCore.Qt.AlignHCenter)
+        self.layoutVertical = QtGui.QVBoxLayout()
+        
+        self.layoutVertical.addWidget(self.video)
+        
+        #self.layoutVertical.setAlignment(self.imagen, QtCore.Qt.AlignHCenter)
 
         self.setMinimumHeight(450)
-        self.setLayout(layoutVertical)
+        self.setLayout(self.layoutVertical)
         self.setGeometry(300, 300, 300, 150)
         # Algunas visualizaciones:
         self.setWindowIcon(QtGui.QIcon('./imagenes/logo.png')) 
@@ -161,13 +147,16 @@ class AlarmaGUI(QtGui.QWidget):         #QWidget #QMainWindow
         """
         if e.key() == QtCore.Qt.Key_Escape:
             self.close()
-
+    
     def _time(self):
         """
         Actualización del tiempo
         """
-        self.lcd.display(strftime("%Y"+"-"+"%m"+"-"+"%d"+" "+"%H"+":"+"%M"+":"+"%S"))
-
+        #self.lcd.display(strftime("%Y"+"-"+"%m"+"-"+"%d"+" "+"%H"+":"+"%M"+":"+"%S"))
+        #self.layoutVertical.removeWidget(self.video)
+        #self.layoutVertical.addWidget(self.video)
+        pass
+    
     def _actualizarValor(self,valor):
         """
         Actualiza los campos en la GUI
@@ -205,6 +194,13 @@ class ThreadClass(QtCore.QThread):
         """
         super(ThreadClass,self).__init__(parent)
         self.queue = fila
+        self.passwords = []
+        with open('./database/key', 'r') as f:
+            readData = f.read()
+        for password in readData.split('\n'):
+            if len(password)>4:
+                self.passwords.append(password) 
+        print(self.passwords)
 
     def run(self):
         """
