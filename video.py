@@ -75,21 +75,17 @@ class AlarmaGUI(QtGui.QWidget):         #QWidget #QMainWindow
         self.labelIdentificado.setFont(QtGui.QFont('SansSerif', 24))
 
         # Parte visual
-        self.media1 = Phonon.MediaSource('./videos/ea.mp4')
-        self.video1 = Phonon.VideoPlayer(self)
-        self.video1.load(self.media1)
+        self.media0 = Phonon.MediaSource('./imagenes/logoWeb.png')
+        self.media1 = Phonon.MediaSource('./videos/1.avi')
+        self.video = Phonon.VideoPlayer(self)
+        self.video.load(self.media1)
 
-        self.media2 = Phonon.MediaSource('./videos/or.avi')
-        self.video2 = Phonon.VideoPlayer(self)
-        self.video2.load(self.media2)
-        
+        self.media2 = Phonon.MediaSource('./videos/2.avi')
 
         self.fechaYHora = QtGui.QLabel('Fecha')
         self.estadoAlarma = QtGui.QLabel('Alarma Activada')
         self.fechaYHora.setGeometry(25, 25, 250, 250)
         self.pixmapAct = QtGui.QPixmap('./imagenes/alarmaActivada.png')
-        self.pixmapDeact = QtGui.QPixmap('./imagenes/alarmaDesactivada.png')
-        self.pixmapLogo = QtGui.QPixmap('./imagenes/logoWeb.png')
         self.imagen.setPixmap(self.pixmapAct)
 
 
@@ -99,13 +95,13 @@ class AlarmaGUI(QtGui.QWidget):         #QWidget #QMainWindow
 
         # Layouts:
         self.layoutVideo1 = QtGui.QVBoxLayout()
-        self.layoutVideo2 = QtGui.QVBoxLayout()
         
-        self.layoutVideo1.addWidget(self.video1)
-        self.layoutVideo2.addWidget(self.video2)
-        
+        self.layoutVideo1.addWidget(self.video)
         #self.layoutVideo1.setAlignment(self.imagen, QtCore.Qt.AlignHCenter)
 
+        self.setLayout(self.layoutVideo1)
+        self.video.load(self.media0)
+        self.video.play()
         self.setMinimumHeight(450)
         
         self.setGeometry(300, 300, 300, 150)
@@ -133,17 +129,17 @@ class AlarmaGUI(QtGui.QWidget):         #QWidget #QMainWindow
         """
         Despliega el video 1
         """
-        self.setLayout(self.layoutVideo1)
-        self.removeLayout(self.layoutVideo1)
-        self.video1.play()
+        print('reproduciendo video 1')
+        self.video.load(self.media1)
+        self.video.play()
         
     def _mostrarVideo2(self):
         """
         Despliega el video 2
         """
-        self.setLayout(self.layoutVideo2)
-        self.removeLayout(self.layoutVideo2)
-        self.video2.play()
+        print('reproduciendo video 2')
+        self.video.load(self.media2)
+        self.video.play()
 
 class ThreadClass(QtCore.QThread):
     """
@@ -161,7 +157,6 @@ class ThreadClass(QtCore.QThread):
         for password in readData.split('\n'):
             if len(password)>4:
                 self.passwords.append(password) 
-        print(self.passwords)
 
     def run(self):
         """
@@ -174,7 +169,6 @@ class ThreadClass(QtCore.QThread):
                     self.emit(QtCore.SIGNAL('MOSTRAR_VIDEO_1'))
                 else:
                     self.emit(QtCore.SIGNAL('MOSTRAR_VIDEO_2'))
-
 
 if __name__ == '__main__':
     """
