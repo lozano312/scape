@@ -17,18 +17,8 @@ class GUIParalela():
     Presionar ESC para cerrar el GUI
     """
     myQueue = multiprocessing.Queue()
-    valoresPrueba =     [('01A22AE32F','Alvaro Hurtado'),
-                        ('01A22AE330','Ivan Hurtado'),
-                        ('01A22AE331','Tatiana Hurtado'),
-                        ('01A22AE332','Maria Maldonado'),
-                        ('01A22AE333','Stanley Salvatierra'),
-                        ('01A22AE334','David Gamon'),
-                        ('01A22AE335','Daniel Condori'),
-                        ('01A22AE336','Viviana Colque'),
-                        ('01A22AE337','Denisse Vargas'),
-                        ('01A22AE338','Ramiro Aliendre')]
 
-    def __init__(self,simulation = False,fullScreen=True):
+    def __init__(self,fullScreen=True):
         """
         Constructor de la clase tiene dos opciones a activar o desactivar:
         bool simulation = Falso por defecto, corre una simulación de la activación y desactivación de la alarma por un minuto con datos simulados en forma de variable de clase
@@ -36,9 +26,6 @@ class GUIParalela():
         """
         self.process = multiprocessing.Process(target=self._correrGui,args=(fullScreen,))
         self.process.start()
-        if simulation:
-            self._simularLlegadaDatos()
-        
 
     def _correrGui(self,fullScreen):
         """
@@ -48,28 +35,7 @@ class GUIParalela():
         interfaz = AlarmaGUI(GUIParalela.myQueue,pantallaTotal=fullScreen)
         sys.exit(app.exec_())
         
-    def _simularLlegadaDatos(self):
-        """
-        Método Auxiliar para simular el ingreso de datos
-        """
-        for i in range(10):
-            sleep(4)
-            self.desactivarAlarma(GUIParalela.valoresPrueba[i][0],GUIParalela.valoresPrueba[i][1])
-            sleep(2)
-            self.activarAlarma()
 
-    
-    def desactivarAlarma(self,id,nombre):
-        """
-        Desactivación de la alarma con ID de la RFID ingresada y el nombre del usuario en forma de string
-        """
-        GUIParalela.myQueue.put((True,id,nombre))
-
-    def activarAlarma(self):
-        """
-        Activación de la alarma
-        """
-        GUIParalela.myQueue.put((False,"",""))
 
 
 class AlarmaGUI(QtGui.QWidget):         #QWidget #QMainWindow
@@ -83,7 +49,8 @@ class AlarmaGUI(QtGui.QWidget):         #QWidget #QMainWindow
         self.titulo = 'Scape Room'
         self.thread = ThreadClass(fila)
         self.thread.start()
-        self.connect(self.thread,QtCore.SIGNAL('ACTUALIZAR_ESTADO'),self._actualizarValor)
+        self.connect(self.thread,QtCore.SIGNAL('MOSTRAR_VIDEO_1'),self._mostrarVideo1)
+        self.connect(self.thread,QtCore.SIGNAL('MOSTRAR_VIDEO_2'),self._mostrarVideo2)
 
         # Clases auxiliares:
         self.initUI()
@@ -108,11 +75,14 @@ class AlarmaGUI(QtGui.QWidget):         #QWidget #QMainWindow
         self.labelIdentificado.setFont(QtGui.QFont('SansSerif', 24))
 
         # Parte visual
-        self.media = Phonon.MediaSource('./videos/ea.mp4')
-        self.video = Phonon.VideoPlayer(self)
-        #self.video.setMinimumSize(320, 240)
-        self.video.load(self.media)
-        self.video.play()
+        self.media1 = Phonon.MediaSource('./videos/ea.mp4')
+        self.video1 = Phonon.VideoPlayer(self)
+        self.video1.load(self.media1)
+
+        self.media2 = Phonon.MediaSource('./videos/or.avi')
+        self.video2 = Phonon.VideoPlayer(self)
+        self.video2.load(self.media2)
+        
 
         self.fechaYHora = QtGui.QLabel('Fecha')
         self.estadoAlarma = QtGui.QLabel('Alarma Activada')
@@ -128,14 +98,16 @@ class AlarmaGUI(QtGui.QWidget):         #QWidget #QMainWindow
         self.timer.start(1000)
 
         # Layouts:
-        self.layoutVertical = QtGui.QVBoxLayout()
+        self.layoutVideo1 = QtGui.QVBoxLayout()
+        self.layoutVideo2 = QtGui.QVBoxLayout()
         
-        self.layoutVertical.addWidget(self.video)
+        self.layoutVideo1.addWidget(self.video1)
+        self.layoutVideo2.addWidget(self.video2)
         
-        #self.layoutVertical.setAlignment(self.imagen, QtCore.Qt.AlignHCenter)
+        #self.layoutVideo1.setAlignment(self.imagen, QtCore.Qt.AlignHCenter)
 
         self.setMinimumHeight(450)
-        self.setLayout(self.layoutVertical)
+        
         self.setGeometry(300, 300, 300, 150)
         # Algunas visualizaciones:
         self.setWindowIcon(QtGui.QIcon('./imagenes/logo.png')) 
@@ -153,36 +125,25 @@ class AlarmaGUI(QtGui.QWidget):         #QWidget #QMainWindow
         Actualización del tiempo
         """
         #self.lcd.display(strftime("%Y"+"-"+"%m"+"-"+"%d"+" "+"%H"+":"+"%M"+":"+"%S"))
-        #self.layoutVertical.removeWidget(self.video)
-        #self.layoutVertical.addWidget(self.video)
+        #self.layoutVideo1.removeWidget(self.video)
+        #self.layoutVideo1.addWidget(self.video)
         pass
     
-    def _actualizarValor(self,valor):
+    def _mostrarVideo1(self):
         """
-        Actualiza los campos en la GUI
+        Despliega el video 1
         """
-        (estado, id, nombre) = valor
-        if estado:
-            self._desactivarAlarma(id,nombre)
-        else:
-            self._activarAlarma()
-
-    def _desactivarAlarma(self,id,nombre):
+        self.setLayout(self.layoutVideo1)
+        self.removeLayout(self.layoutVideo1)
+        self.video1.play()
+        
+    def _mostrarVideo2(self):
         """
-        Actualiza los campos en la GUI para modo Desactivado
+        Despliega el video 2
         """
-        self.imagen.setPixmap(self.pixmapDeact)
-        self.labelAutentificacion.setText(id)
-        self.labelIdentificado.setText(nombre)
-
-    def _activarAlarma(self):
-        """
-        Actualiza los campos en la GUI para modo Activado
-        """
-        self.imagen.setPixmap(self.pixmapAct)
-        self.labelAutentificacion.setText(self.stringSolicitudAutentificacion)
-        self.labelIdentificado.setText('')
-
+        self.setLayout(self.layoutVideo2)
+        self.removeLayout(self.layoutVideo2)
+        self.video2.play()
 
 class ThreadClass(QtCore.QThread):
     """
@@ -209,22 +170,24 @@ class ThreadClass(QtCore.QThread):
         while True:
             if not self.queue.empty():
                 valor = self.queue.get() # valor = (estado, id, nombre)
-                self.emit(QtCore.SIGNAL('ACTUALIZAR_ESTADO'),valor)
+                if valor in self.passwords:
+                    self.emit(QtCore.SIGNAL('MOSTRAR_VIDEO_1'))
+                else:
+                    self.emit(QtCore.SIGNAL('MOSTRAR_VIDEO_2'))
 
 
 if __name__ == '__main__':
     """
     Este pequeno script demostrativo muestra que la interfaz puede ser creada sin interferir con el programa principal
     """
-    p = GUIParalela(simulation = False,fullScreen=True)
-    sleep(2)
-    p.desactivarAlarma('13','Raspberry')
-    sleep(1)
-    p.activarAlarma()
-    sleep(2)
-    p.desactivarAlarma('12','Orange')
-    sleep(1)
-    p.activarAlarma()
-
+    p = GUIParalela(fullScreen=False)
+    enviandoValores = True
+    while enviandoValores:
+        sleep(1)
+        myInput = str(input('Ingrese Contraseña: '))
+        GUIParalela.myQueue.put(myInput)
+        if myInput == '0':
+            enviandoValores = False
+    
     p.process.join() 
 
