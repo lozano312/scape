@@ -85,6 +85,7 @@ class AlarmaGUI(QtGui.QWidget):         #QWidget #QMainWindow
         self.thread = ThreadClass(fila)
         self.thread.start()
         self.connect(self.thread,QtCore.SIGNAL('ACTUALIZAR_ESTADO'),self._actualizarValor)
+
         # Clases auxiliares:
         self.initUI()
         # Al inicializarse la clase se muestra:
@@ -108,6 +109,11 @@ class AlarmaGUI(QtGui.QWidget):         #QWidget #QMainWindow
         self.labelIdentificado.setFont(QtGui.QFont('SansSerif', 24))
 
         # Parte visual
+        self.media = Phonon.MediaSource('./videos/or.avi')
+        self.video = Phonon.VideoPlayer(self)
+        self.video.setMinimumSize(320, 240)
+        self.video.load(self.media)
+        self.video.play()
         self.imagenLogo = QtGui.QLabel(self)
         self.fechaYHora = QtGui.QLabel('Fecha')
         self.estadoAlarma = QtGui.QLabel('Alarma Activada')
@@ -117,9 +123,10 @@ class AlarmaGUI(QtGui.QWidget):         #QWidget #QMainWindow
         self.pixmapLogo = QtGui.QPixmap('./imagenes/logoWeb.png')
         self.imagen.setPixmap(self.pixmapAct)
         self.imagenLogo.setPixmap(self.pixmapLogo)
+        self.imagenLogo.setMaximumHeight(30)
         self.lcd = QtGui.QLCDNumber(self)
         self.lcd.setDigitCount(19)
-        self.lcd.setMaximumHeight(60)
+        self.lcd.setMaximumHeight(30)
         self.lcd.display(strftime("%Y"+"-"+"%m"+"-"+"%d"+" "+"%H"+":"+"%M"+":"+"%S"))
         self.timer = QtCore.QTimer(self)
         self.timer.timeout.connect(self._time)
@@ -135,7 +142,7 @@ class AlarmaGUI(QtGui.QWidget):         #QWidget #QMainWindow
         layoutHorizontalSuperior.addWidget(self.lcd)
         layoutVertical.addLayout(layoutHorizontalSuperior)
         layoutVertical.addWidget(self.imagen)
-        layoutVertical.addWidget(self.labelAutentificacion)
+        layoutVertical.addWidget(self.video)
         layoutVertical.addWidget(self.labelIdentificado)
         layoutVertical.setAlignment(self.imagen, QtCore.Qt.AlignHCenter)
         layoutVertical.setAlignment(self.labelAutentificacion, QtCore.Qt.AlignHCenter)
