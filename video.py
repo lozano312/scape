@@ -32,18 +32,18 @@ class GUIParalela():
         Metodo auxiliar para paralelizar la interfaz
         """
         app = QtGui.QApplication(sys.argv)
-        interfaz = AlarmaGUI(GUIParalela.myQueue,pantallaTotal=fullScreen)
+        interfaz = InterfazVideo(GUIParalela.myQueue,pantallaTotal=fullScreen)
         sys.exit(app.exec_())
         
 
 
 
-class AlarmaGUI(QtGui.QWidget):         #QWidget #QMainWindow
+class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
     """
     Interfaz gráfica visual
     """
     def __init__(self,fila,pantallaTotal = True,parent=None):
-        #super(AlarmaGUI, self).__init__(parent)
+        #super(InterfazVideo, self).__init__(parent)
         QtGui.QWidget.__init__(self, None, QtCore.Qt.WindowStaysOnTopHint)
         # Parámetros constantes:
         self.titulo = 'Scape Room'

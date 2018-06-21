@@ -9,23 +9,9 @@ from PyQt5 import QtGui, QtCore
 
 class GUIParalela():
     """
-    La presente clase representa una interfaz visual de alarma Activada/Desactivada
-    Su función principal es la de gestionar la activación y desactivación de la alarma.
-    Al Desactivar la alarma Identifica a la persona ingresando
-    Al Activar la alarma se regresa al estado inicial
-    Presionar ESC para cerrar el GUI
+    La presente clase representa un juego en el que se despliegan diferentes preguntas, cada cuál permite pasar a la siguiente
+    Al finalizar las preguntas se activa un relay por medio de una de las GPIO de la Raspberry Pi
     """
-    myQueue = multiprocessing.Queue()
-    valoresPrueba =     [('01A22AE32F','Alvaro Hurtado'),
-                        ('01A22AE330','Ivan Hurtado'),
-                        ('01A22AE331','Tatiana Hurtado'),
-                        ('01A22AE332','Maria Maldonado'),
-                        ('01A22AE333','Stanley Salvatierra'),
-                        ('01A22AE334','David Gamon'),
-                        ('01A22AE335','Daniel Condori'),
-                        ('01A22AE336','Viviana Colque'),
-                        ('01A22AE337','Denisse Vargas'),
-                        ('01A22AE338','Ramiro Aliendre')]
 
     def __init__(self,simulation = False,fullScreen=True):
         """
@@ -44,7 +30,7 @@ class GUIParalela():
         Metodo auxiliar para paralelizar la interfaz
         """
         app = QtGui.QApplication(sys.argv)
-        interfaz = AlarmaGUI(GUIParalela.myQueue,pantallaTotal=fullScreen)
+        interfaz = InterfazPreguntas(GUIParalela.myQueue,pantallaTotal=fullScreen)
         sys.exit(app.exec_())
         
     def _simularLlegadaDatos(self):
@@ -71,16 +57,16 @@ class GUIParalela():
         GUIParalela.myQueue.put((False,"",""))
 
 
-class AlarmaGUI(QtGui.QWidget):         #QWidget #QMainWindow
+class InterfazPreguntas(QtGui.QWidget):         #QWidget #QMainWindow
     """
     Interfaz gráfica visual
     """
     def __init__(self,fila,pantallaTotal = True,parent=None):
-        #super(AlarmaGUI, self).__init__(parent)
+        #super(InterfazPreguntas, self).__init__(parent)
         QtGui.QWidget.__init__(self, None, QtCore.Qt.WindowStaysOnTopHint)
         # Parámetros constantes:
         self.titulo = 'Estado de alarma'
-        self.estado = 'Activado'
+        self.estadoActual = 0
         self.thread = ThreadClass(fila)
         self.thread.start()
         self.connect(self.thread,QtCore.SIGNAL('ACTUALIZAR_ESTADO'),self._actualizarValor)
