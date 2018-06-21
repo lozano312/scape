@@ -57,7 +57,9 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         for pregunta in readData.split('\n'):
             if len(pregunta)==3:
                 (number,question,answer) = pregunta.split(';')
-                self.listaPreguntas.append((number,question,answer)) 
+                self.listaPreguntas.append((number,question,answer))
+                print('Agregado: ',self.listaPreguntas[-1])
+        print('Total: ',self.listaPreguntas)
         self.estadoActual = 0
         
         self.thread.start()
