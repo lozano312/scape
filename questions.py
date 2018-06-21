@@ -87,7 +87,10 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.imagen = QtGui.QLabel(self)
         self.respuestaLabel = QtGui.QLabel('Respuesta:')
         self.intro = QtGui.QLineEdit('')
+        self.intro.setMaximumWidth(400)
+        self.intro.setPointSize(24)
         self.pregunta = QtGui.QLabel()
+        self.pregunta.setFont(QtGui.QFont('SansSerif', 36))
         self.layoutTotalHorizontal = QtGui.QHBoxLayout()
         self.layoutGanador = QtGui.QHBoxLayout()
         
@@ -117,17 +120,12 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.setWindowTitle(self.titulo)
         
     def actualizarLayout(self,estado):
-        self.pixmapAct = QtGui.QPixmap('./database/{}.png'.format(self.listaPreguntas[estado][0]))
+        self.pixmapAct = QtGui.QPixmap('./database/{}.png'.format(self.listaPreguntas[estado-1][0]))
         self.imagen.setPixmap(self.pixmapAct)
-        self.pregunta.setText(self.listaPreguntas[estado][1])
+        self.pregunta.setText(self.listaPreguntas[estado-1][1])
         self.setLayout(self.layoutTotalHorizontal)
-        """
-        self.pixmapAct = QtGui.QPixmap('./database/0.png')
-                self.imagen.setPixmap(self.pixmapAct)
-                self.respuestaLabel.setText('Ganáste!')
-                self.pregunta.setText('')
-                self.setLayout(self.layoutTotalHorizontal)
-        """
+        if estado == 0:
+            self.pregunta.setText('GANASTE!')
         
     def displayOverlay(self):
         self.popup = QtGui.QDialog(self,QtCore.Qt.WindowStaysOnTopHint)
