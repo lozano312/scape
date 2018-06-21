@@ -112,6 +112,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.layoutTotalHorizontal.addLayout(self.preguntasDerechaLayout)
 
         self.actualizarLayout(self.estadoActual)
+        self.setLayout(self.layoutTotalHorizontal)
         
         self.setMinimumHeight(450)
         
