@@ -54,6 +54,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.connect(self.thread,QtCore.SIGNAL('MOSTRAR_VIDEO_1'),self._mostrarVideo1)
         self.connect(self.thread,QtCore.SIGNAL('MOSTRAR_VIDEO_2'),self._mostrarVideo2)
         self.connect(self.video,QtCore.SIGNAL("finished()"),self._terminoVideo)
+        self.connect(self.thread,QtCore.SIGNAL("INTRODUCI_CARACTER"),self.actualizarTexto)
 
         # Clases auxiliares: 
         self.initUI()
@@ -100,7 +101,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.layoutVideo1.addWidget(self.video)
         self.dataIntroLayout = QtGui.QHBoxLayout()
         self.passwd = QtGui.QLabel('Contraseña')
-        self.intro = QtGui.QLineEdit('Contraseña')
+        #self.intro = QtGui.QLineEdit('Contraseña')
         self.dataIntroLayout.addWidget(self.passwd)
         self.dataIntroLayout.addWidget(self.intro)
         self.layoutVideo1.addLayout(self.dataIntroLayout)
@@ -163,6 +164,9 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         #self.layoutVideo1.addWidget(self.video)
         pass
     
+    def actualizarTexto(self,valor):
+        self.intro.setText(self.intro.text()+valor)
+
     def _mostrarVideo1(self):
         """
         Despliega el video 1
@@ -205,11 +209,14 @@ class ThreadClass(QtCore.QThread):
         while True:
             if not GUIParalela.miTeclado.teclas.empty():
                 valor = GUIParalela.miTeclado.teclas.get() # valor = (estado, id, nombre)
+                self.emit(QtCore.SIGNAL('INTRODUCI_CARACTER'),valor)
                 if valor == '*':
                     print('Introducido: ',GUIParalela.valorActual)
                     if int(GUIParalela.valorActual) in self.passwords:
+                        print('Signal 1')
                         self.emit(QtCore.SIGNAL('MOSTRAR_VIDEO_1'))
                     else:
+                        print('Signal 2')
                         self.emit(QtCore.SIGNAL('MOSTRAR_VIDEO_2'))
                     GUIParalela.valorActual = ''
                     #self.intro.setText(GUIParalela.valorActual)
