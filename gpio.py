@@ -1,6 +1,7 @@
 import time
 import RPi.GPIO as GPIO
 from multiprocessing import Queue
+from multiprocessing import Process
 
 class MembraneMatrix():
 	teclas = Queue()
@@ -21,7 +22,8 @@ class MembraneMatrix():
 			
 		for i in range(4):
 			GPIO.setup(MembraneMatrix.ROW[i],GPIO.IN,pull_up_down = GPIO.PUD_UP)
-		self.loop()
+		self.p = Process(target=loop, args=())
+		self.p.start()
 
 	def loop(self):
 		try:
@@ -46,6 +48,9 @@ class MembraneMatrix():
 					GPIO.output(MembraneMatrix.COL[j],1)
 		except KeyboardInterrupt:
 			GPIO.cleanup()
+
+	def __del__(self):
+		self.p.join()
 
 if __name__ == '__main__':
 	miMembrana = MembraneMatrix()
