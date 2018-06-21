@@ -22,7 +22,7 @@ class MembraneMatrix():
 			
 		for i in range(4):
 			GPIO.setup(MembraneMatrix.ROW[i],GPIO.IN,pull_up_down = GPIO.PUD_UP)
-		self.p = Process(target=loop, args=())
+		self.p = Process(target=self.loop, args=())
 		self.p.start()
 
 	def loop(self):
