@@ -72,7 +72,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         Inicialización de sus parámetros
         """
         # Parte visual
-        self.stack = QStackedWidget (self)
+        self.stack = QtGui.QStackedWidget (self)
         self.imagen = QtGui.QLabel(self)
         self.pixmapAct = QtGui.QPixmap('./imagenes/logoWeb.png')
         self.imagen.setPixmap(self.pixmapAct)
@@ -91,9 +91,12 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.dataIntroLayout = QtGui.QHBoxLayout()
         self.passwd = QtGui.QLabel('Contraseña')
         self.intro = QtGui.QLineEdit('')
+        #self.dataIntroLayout.addStretch()
         self.dataIntroLayout.addWidget(self.passwd)
         self.dataIntroLayout.addWidget(self.intro)
+        #self.dataIntroLayout.addStretch()
         self.layoutVideo1.addLayout(self.dataIntroLayout)
+        #self.layoutVideo1.addStretch()
 
         self.setLayout(self.layoutVideo1)
         
