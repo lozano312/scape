@@ -64,13 +64,14 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
             self.showFullScreen()
         else:
             self.show()
-        
+        #self.displayOverlay()
+
+
     def initUI(self):
         """
         Inicialización de sus parámetros
         """
         # Parte visual
-        self.stack = QtGui.QStackedWidget (self)
         self.imagen = QtGui.QLabel(self)
         self.pixmapAct = QtGui.QPixmap('./imagenes/logoWeb.png')
         self.imagen.setPixmap(self.pixmapAct)
@@ -81,25 +82,23 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
 
         # Layouts:
         self.layoutVideo1 = QtGui.QVBoxLayout()
-        self.stack.addWidget(self.imagen)
-        self.stack.addWidget(self.video)
-        self.layoutVideo1.addWidget(self.stack)
-        self.stack.setCurrentIndex(0)
+        
+        self.layoutVideo1.addWidget(self.video)
+        self.layoutVideo1.addWidget(self.imagen)
+        self.layoutVideo1.setAlignment(self.imagen, QtCore.Qt.AlignHCenter)
+        self.video.setHidden(True)
         self.dataIntroLayout = QtGui.QHBoxLayout()
         self.passwd = QtGui.QLabel('Contraseña')
         self.intro = QtGui.QLineEdit('')
-        #self.dataIntroLayout.addStretch()
         self.dataIntroLayout.addWidget(self.passwd)
         self.dataIntroLayout.addWidget(self.intro)
-        self.dataIntroLayout.addStretch()
         self.layoutVideo1.addLayout(self.dataIntroLayout)
-        #self.layoutVideo1.addStretch()
 
         self.setLayout(self.layoutVideo1)
         
         self.video.play()
         
-        #self.setMinimumHeight(450)
+        self.setMinimumHeight(450)
         
         
         #self.setGeometry(300, 300, 300, 150)
@@ -108,6 +107,35 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         
         self.setWindowTitle(self.titulo)
         
+        
+    def displayOverlay(self):
+        self.popup = QtGui.QDialog(self,QtCore.Qt.WindowStaysOnTopHint)
+        self.popup.setWindowFlags(QtCore.Qt.FramelessWindowHint)
+        
+        self.passwd = QtGui.QLabel('Contraseña')
+        #self.passwd.setMinimumWidth(500)
+        self.intro = QtGui.QLineEdit('')
+        
+        f = self.intro.font()
+        f.setPointSize(27)
+        self.intro.setFont(f)
+        self.intro.setMinimumWidth(500)
+        #self.intro.setEchoMode(QtGui.QLineEdit.Password)
+        self.intro.updateGeometry()
+        self.miMensaje = QtGui.QHBoxLayout()
+        #self.miMensaje.addWidget(self.passwd)
+        self.miMensaje.addWidget(self.intro)
+        self.popup.setLayout(self.miMensaje)
+        #position_x = (self.frameGeometry().width()-self.popup.frameGeometry().width())/2
+        #position_y = (self.frameGeometry().height()-self.popup.frameGeometry().height())/2
+        resolution = QtGui.QDesktopWidget().screenGeometry()
+        position_x = (resolution.width() / 2) - (self.popup.frameGeometry().width() / 2)
+        position_y = 7/8*((resolution.height()) - (self.popup.frameGeometry().height()))
+
+        self.popup.move(position_x, position_y)
+        #event.accept()
+        self.popup.show() 
+
     def keyPressEvent(self, e):
         """
         Se redefine la interacción con el teclado para que la tecla ESC cierre el GUI
@@ -125,7 +153,8 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         """
         Despliega el video 1
         """
-        self.stack.setCurrentIndex(1)
+        self.video.setHidden(False)
+        self.imagen.setHidden(True)
         self.video.load(self.media1)
         self.video.play()
         
@@ -133,12 +162,14 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         """
         Despliega el video 2
         """
-        self.stack.setCurrentIndex(1)
+        self.video.setHidden(False)
+        self.imagen.setHidden(True)
         self.video.load(self.media2)
         self.video.play()
 
     def _terminoVideo(self):
-        self.stack.setCurrentIndex(0)
+        self.video.setHidden(True)
+        self.imagen.setHidden(False)
 
 class ThreadClass(QtCore.QThread):
     """
@@ -197,4 +228,3 @@ if __name__ == '__main__':
     p = GUIParalela(fullScreen=pantalla)
 
     p.process.join() 
-
