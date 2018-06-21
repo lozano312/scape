@@ -64,9 +64,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
             self.showFullScreen()
         else:
             self.show()
-        #self.displayOverlay()
-
-
+        
     def initUI(self):
         """
         Inicialización de sus parámetros
@@ -76,7 +74,6 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.imagen = QtGui.QLabel(self)
         self.pixmapAct = QtGui.QPixmap('./imagenes/logoWeb.png')
         self.imagen.setPixmap(self.pixmapAct)
-        self.media0 = Phonon.MediaSource('./imagenes/logoWeb.png')
         self.media1 = Phonon.MediaSource('./videos/1.avi')
         
         self.video.load(self.media1)
@@ -94,7 +91,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         #self.dataIntroLayout.addStretch()
         self.dataIntroLayout.addWidget(self.passwd)
         self.dataIntroLayout.addWidget(self.intro)
-        #self.dataIntroLayout.addStretch()
+        self.dataIntroLayout.addStretch()
         self.layoutVideo1.addLayout(self.dataIntroLayout)
         #self.layoutVideo1.addStretch()
 
@@ -102,7 +99,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         
         self.video.play()
         
-        self.setMinimumHeight(450)
+        #self.setMinimumHeight(450)
         
         
         #self.setGeometry(300, 300, 300, 150)
@@ -111,35 +108,6 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         
         self.setWindowTitle(self.titulo)
         
-        
-    def displayOverlay(self):
-        self.popup = QtGui.QDialog(self,QtCore.Qt.WindowStaysOnTopHint)
-        self.popup.setWindowFlags(QtCore.Qt.FramelessWindowHint)
-        
-        self.passwd = QtGui.QLabel('Contraseña')
-        #self.passwd.setMinimumWidth(500)
-        self.intro = QtGui.QLineEdit('')
-        
-        f = self.intro.font()
-        f.setPointSize(27)
-        self.intro.setFont(f)
-        self.intro.setMinimumWidth(500)
-        #self.intro.setEchoMode(QtGui.QLineEdit.Password)
-        self.intro.updateGeometry()
-        self.miMensaje = QtGui.QHBoxLayout()
-        #self.miMensaje.addWidget(self.passwd)
-        self.miMensaje.addWidget(self.intro)
-        self.popup.setLayout(self.miMensaje)
-        #position_x = (self.frameGeometry().width()-self.popup.frameGeometry().width())/2
-        #position_y = (self.frameGeometry().height()-self.popup.frameGeometry().height())/2
-        resolution = QtGui.QDesktopWidget().screenGeometry()
-        position_x = (resolution.width() / 2) - (self.popup.frameGeometry().width() / 2)
-        position_y = 7/8*((resolution.height()) - (self.popup.frameGeometry().height()))
-
-        self.popup.move(position_x, position_y)
-        #event.accept()
-        self.popup.show() 
-
     def keyPressEvent(self, e):
         """
         Se redefine la interacción con el teclado para que la tecla ESC cierre el GUI
