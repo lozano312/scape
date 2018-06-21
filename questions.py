@@ -55,6 +55,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         with open('./database/quest', 'r') as f:
             readData = f.read()
         for pregunta in readData.split('\n'):
+            print('Size: ',len(pregunta))
             if len(pregunta)==3:
                 (number,question,answer) = pregunta.split(';')
                 self.listaPreguntas.append((number,question,answer))
