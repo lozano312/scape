@@ -7,7 +7,7 @@ import multiprocessing
 from PyQt4 import QtGui, QtCore
 from PyQt4.phonon import Phonon
 from time import sleep, strftime
-from gpio.py import MembraneMatrix
+from gpio import MembraneMatrix
 
 class GUIParalela():
     """
@@ -212,6 +212,7 @@ class ThreadClass(QtCore.QThread):
                     else:
                         self.emit(QtCore.SIGNAL('MOSTRAR_VIDEO_2'))
                     GUIParalela.valorActual = ''
+                    self.intro.setText(GUIParalela.valorActual)
                 else:
                      GUIParalela.valorActual+= str(valor)
                      self.intro.setText(GUIParalela.valorActual)
@@ -222,6 +223,7 @@ if __name__ == '__main__':
     Este pequeno script demostrativo muestra que la interfaz puede ser creada sin interferir con el programa principal
     """
     p = GUIParalela(fullScreen=False)
+    """
     enviandoValores = True
     while enviandoValores:
         sleep(1)
@@ -229,6 +231,7 @@ if __name__ == '__main__':
         if myInput == '0':
             break
         GUIParalela.myQueue.put(myInput)
+    """
     
     p.process.join() 
 
