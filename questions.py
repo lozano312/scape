@@ -30,6 +30,8 @@ class GUIParalela():
         with open('./database/quest', 'r') as f:
             readData = f.read()
         for password in readData.split('\n'):
+            print(password)
+            print(password.split(';'))
             (number,question,answer) = password.split(';')
             self.passwords.append((number,question,answer)) 
         self.estadoActual = 0
