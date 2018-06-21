@@ -29,11 +29,10 @@ class GUIParalela():
         self.passwords =[] #id,pregunta,respuesta
         with open('./database/quest', 'r') as f:
             readData = f.read()
-        for password in readData.split('\n'):
-            print(password)
-            print(password.split(';'))
-            (number,question,answer) = password.split(';')
-            self.passwords.append((number,question,answer)) 
+        for pregunta in readData.split('\n'):
+            if len(pregunta)==3:
+                (number,question,answer) = pregunta.split(';')
+                self.pregunta.append((number,question,answer)) 
         self.estadoActual = 0
         self.process = multiprocessing.Process(target=self._correrGui,args=(fullScreen,))
         self.process.start()
