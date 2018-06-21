@@ -100,6 +100,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         
         self.smallLayout.addWidget(self.respuestaLabel)
         self.smallLayout.addWidget(self.intro)
+        self.smallLayout.addStretch()
 
         self.preguntasDerechaLayout.addWidget(self.pregunta)
         self.preguntasDerechaLayout.addLayout(self.smallLayout)
