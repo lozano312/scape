@@ -158,9 +158,9 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.intro.setText(self.intro.text()+str(valor))
 
     def revisarRespuesta(self):
-        print('Intro: ',self.intro.text(),type(self.intro.text()))
-        print('Corr: ',self.listaPreguntas[self.estadoActual][1],type(self.listaPreguntas[self.estadoActual][1]))
-        if self.intro.text() == self.listaPreguntas[self.estadoActual][1]:
+        #print('Intro: ',self.intro.text(),type(self.intro.text()))
+        #print('Corr: ',self.listaPreguntas[self.estadoActual][2],type(self.listaPreguntas[self.estadoActual][1]))
+        if self.intro.text() == self.listaPreguntas[self.estadoActual][2]:
             print(' Correcta')
             self.estadoActual += 1
             self.actualizarLayout()
