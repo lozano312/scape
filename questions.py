@@ -19,13 +19,20 @@ class GUIParalela():
     myQueue = multiprocessing.Queue()
     miTeclado = MembraneMatrix()
     valorActual = ''
-
+    
     def __init__(self,fullScreen=True):
         """
         Constructor de la clase tiene dos opciones a activar o desactivar:
         bool simulation = Falso por defecto, corre una simulación de la activación y desactivación de la alarma por un minuto con datos simulados en forma de variable de clase
         bool fullScreen = True por defecto, corre la GUI en modo de pantalla total, lo que se espera en su funcionamiento normal
         """
+        self.passwords =[] #id,pregunta,respuesta
+        with open('./database/quest', 'r') as f:
+            readData = f.read()
+        for password in readData.split('\n'):
+            (number,question,answer) = password.split(';')
+            self.passwords.append((number,question,answer)) 
+        self.estadoActual = 0
         self.process = multiprocessing.Process(target=self._correrGui,args=(fullScreen,))
         self.process.start()
         
@@ -72,9 +79,11 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         """
         # Parte visual
         self.imagen = QtGui.QLabel(self)
-        self.pixmapAct = QtGui.QPixmap('./database/1.png')
+        self.passwords.append[self.estadoActual]#((number,question,answer)) 
+        
+        self.pixmapAct = QtGui.QPixmap('./database/{}.png'.format(self.passwords.append[self.estadoActual][0]))
         self.imagen.setPixmap(self.pixmapAct)
-        self.pregunta = QtGui.QLabel('¿Cuantas patas tiene una araña?')
+        self.pregunta = QtGui.QLabel(self.passwords.append[self.estadoActual][1])
         self.respuestaLabel = QtGui.QLabel('Respuesta:')
         self.intro = QtGui.QLineEdit('')
 
@@ -87,7 +96,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         
         self.smallLayout.addWidget(self.respuestaLabel)
         self.smallLayout.addWidget(self.intro)
-        
+
         self.preguntasDerechaLayout.addWidget(self.pregunta)
         self.preguntasDerechaLayout.addLayout(self.smallLayout)
 
@@ -149,21 +158,6 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
     def borrarTexto(self):
         self.intro.setText('')
 
-    def _mostrarVideo1(self):
-        """
-        Despliega el video 1
-        """
-        pass
-        
-    def _mostrarVideo2(self):
-        """
-        Despliega el video 2
-        """
-        pass
-
-    def _terminoVideo(self):
-        pass
-
 class ThreadClass(QtCore.QThread):
     """
     Thread para revisión continua de la fila de registros
@@ -173,13 +167,7 @@ class ThreadClass(QtCore.QThread):
         Constructor
         """
         super(ThreadClass,self).__init__(parent)
-        self.queue = fila
-        self.passwords = []
-        with open('./database/key', 'r') as f:
-            readData = f.read()
-        for password in readData.split('\n'):
-            if len(password)>4:
-                self.passwords.append(password) 
+        
 
     def run(self):
         """
