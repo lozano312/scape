@@ -72,6 +72,9 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         Inicialización de sus parámetros
         """
         # Parte visual
+        self.imagen = QtGui.QLabel(self)
+        self.pixmapAct = QtGui.QPixmap('./imagenes/logoWeb.png')
+        self.imagen.setPixmap(self.pixmapAct)
         self.media0 = Phonon.MediaSource('./imagenes/logoWeb.png')
         self.media1 = Phonon.MediaSource('./videos/1.avi')
         
@@ -82,6 +85,8 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.layoutVideo1 = QtGui.QVBoxLayout()
         
         self.layoutVideo1.addWidget(self.video)
+        self.layoutVideo1.addWidget(self.imagen)
+        self.video.setHidden(True)
         self.dataIntroLayout = QtGui.QHBoxLayout()
         self.passwd = QtGui.QLabel('Contraseña')
         self.intro = QtGui.QLineEdit('')
@@ -90,7 +95,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.layoutVideo1.addLayout(self.dataIntroLayout)
 
         self.setLayout(self.layoutVideo1)
-        self.video.load(self.media0)
+        
         self.video.play()
         
         self.setMinimumHeight(450)
@@ -148,6 +153,8 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         """
         Despliega el video 1
         """
+        self.video.setHidden(False)
+        self.imagen.setHidden(True)
         self.video.load(self.media1)
         self.video.play()
         
@@ -155,12 +162,14 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         """
         Despliega el video 2
         """
+        self.video.setHidden(False)
+        self.imagen.setHidden(True)
         self.video.load(self.media2)
         self.video.play()
 
     def _terminoVideo(self):
-        self.video.load(self.media0)
-        self.video.play()
+        self.video.setHidden(True)
+        self.imagen.setHidden(False)
 
 class ThreadClass(QtCore.QThread):
     """
