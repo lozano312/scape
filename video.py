@@ -71,30 +71,12 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         """
         Inicialización de sus parámetros
         """
-        # Definición de campos:
-        self.stringSolicitudAutentificacion = 'AUTENTIFIQUESE POR FAVOR'
-        
-
-        self.labelAutentificacion = QtGui.QLabel(self.stringSolicitudAutentificacion)
-        self.labelAutentificacion.setFont(QtGui.QFont('SansSerif', 36))
-        self.labelIdentificado = QtGui.QLabel('')
-        self.labelIdentificado.setFont(QtGui.QFont('SansSerif', 24))
-
         # Parte visual
         self.media0 = Phonon.MediaSource('./imagenes/logoWeb.png')
         self.media1 = Phonon.MediaSource('./videos/1.avi')
         
         self.video.load(self.media1)
         self.media2 = Phonon.MediaSource('./videos/2.avi')
-
-        
-        self.estadoAlarma = QtGui.QLabel('Alarma Activada')
-        
-        self.pixmapAct = QtGui.QPixmap('./imagenes/alarmaActivada.png')
-        
-        self.timer = QtCore.QTimer(self)
-        self.timer.timeout.connect(self._time)
-        self.timer.start(1000)
 
         # Layouts:
         self.layoutVideo1 = QtGui.QVBoxLayout()
@@ -155,15 +137,6 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         """
         if e.key() == QtCore.Qt.Key_Escape:
             self.close()
-    
-    def _time(self):
-        """
-        Actualización del tiempo
-        """
-        #self.lcd.display(strftime("%Y"+"-"+"%m"+"-"+"%d"+" "+"%H"+":"+"%M"+":"+"%S"))
-        #self.layoutVideo1.removeWidget(self.video)
-        #self.layoutVideo1.addWidget(self.video)
-        pass
     
     def actualizarTexto(self,valor):
         self.intro.setText(self.intro.text()+str(valor))
