@@ -4,9 +4,10 @@
 
 import sys
 import multiprocessing
-from time import sleep, strftime
 from PyQt4 import QtGui, QtCore
 from PyQt4.phonon import Phonon
+from time import sleep, strftime
+from gpio.py import MembraneMatrix
 
 class GUIParalela():
     """
@@ -17,6 +18,8 @@ class GUIParalela():
     Presionar ESC para cerrar el GUI
     """
     myQueue = multiprocessing.Queue()
+    miTeclado = MembraneMatrix()
+    valorActual = ''
 
     def __init__(self,fullScreen=True):
         """
@@ -26,6 +29,7 @@ class GUIParalela():
         """
         self.process = multiprocessing.Process(target=self._correrGui,args=(fullScreen,))
         self.process.start()
+        
 
     def _correrGui(self,fullScreen):
         """
@@ -34,9 +38,6 @@ class GUIParalela():
         app = QtGui.QApplication(sys.argv)
         interfaz = InterfazVideo(GUIParalela.myQueue,pantallaTotal=fullScreen)
         sys.exit(app.exec_())
-        
-
-
 
 class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
     """
@@ -100,7 +101,6 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.dataIntroLayout = QtGui.QHBoxLayout()
         self.passwd = QtGui.QLabel('Contraseña')
         self.intro = QtGui.QLineEdit('Contraseña')
-        self.intro.setEchoMode(QtGui.QLineEdit.Password)
         self.dataIntroLayout.addWidget(self.passwd)
         self.dataIntroLayout.addWidget(self.intro)
         self.layoutVideo1.addLayout(self.dataIntroLayout)
@@ -125,13 +125,13 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         
         self.passwd = QtGui.QLabel('Contraseña')
         #self.passwd.setMinimumWidth(500)
-        self.intro = QtGui.QLineEdit('Contraseña')
+        self.intro = QtGui.QLineEdit('')
         
         f = self.intro.font()
         f.setPointSize(27)
         self.intro.setFont(f)
-        #self.intro.setMinimumWidth(500)
-        self.intro.setEchoMode(QtGui.QLineEdit.Password)
+        self.intro.setMinimumWidth(500)
+        #self.intro.setEchoMode(QtGui.QLineEdit.Password)
         self.intro.updateGeometry()
         self.miMensaje = QtGui.QHBoxLayout()
         #self.miMensaje.addWidget(self.passwd)
@@ -203,18 +203,25 @@ class ThreadClass(QtCore.QThread):
         Re implementación del método
         """
         while True:
-            if not self.queue.empty():
-                valor = self.queue.get() # valor = (estado, id, nombre)
-                if valor in self.passwords:
-                    self.emit(QtCore.SIGNAL('MOSTRAR_VIDEO_1'))
+            if not GUIParalela.miTeclado.teclas.empty():
+                valor = GUIParalela.miTeclado.teclas.get() # valor = (estado, id, nombre)
+                if valor == '*':
+                    print('Introducido: ',GUIParalela.valorActual)
+                    if int(GUIParalela.valorActual) in self.passwords:
+                        self.emit(QtCore.SIGNAL('MOSTRAR_VIDEO_1'))
+                    else:
+                        self.emit(QtCore.SIGNAL('MOSTRAR_VIDEO_2'))
+                    GUIParalela.valorActual = ''
                 else:
-                    self.emit(QtCore.SIGNAL('MOSTRAR_VIDEO_2'))
-
+                     GUIParalela.valorActual+= str(valor)
+                     self.intro.setText(GUIParalela.valorActual)
+                
+                
 if __name__ == '__main__':
     """
     Este pequeno script demostrativo muestra que la interfaz puede ser creada sin interferir con el programa principal
     """
-    p = GUIParalela(fullScreen=True)
+    p = GUIParalela(fullScreen=False)
     enviandoValores = True
     while enviandoValores:
         sleep(1)
