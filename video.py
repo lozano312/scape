@@ -55,6 +55,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.connect(self.thread,QtCore.SIGNAL('MOSTRAR_VIDEO_2'),self._mostrarVideo2)
         self.connect(self.video,QtCore.SIGNAL("finished()"),self._terminoVideo)
         self.connect(self.thread,QtCore.SIGNAL("INTRODUCI_CARACTER"),self.actualizarTexto)
+        self.connect(self.thread,QtCore.SIGNAL("BORRAR"),self.borrarTexto)
 
         # Clases auxiliares: 
         self.initUI()
@@ -167,6 +168,9 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
     def actualizarTexto(self,valor):
         self.intro.setText(self.intro.text()+str(valor))
 
+    def borrarTexto(self):
+        self.intro.setText('')
+
     def _mostrarVideo1(self):
         """
         Despliega el video 1
@@ -209,7 +213,7 @@ class ThreadClass(QtCore.QThread):
         while True:
             if not GUIParalela.miTeclado.teclas.empty():
                 valor = GUIParalela.miTeclado.teclas.get() # valor = (estado, id, nombre)
-                self.emit(QtCore.SIGNAL('INTRODUCI_CARACTER'),valor)
+                
                 if valor == '*':
                     print('Introducido: ',GUIParalela.valorActual)
                     if int(GUIParalela.valorActual) in self.passwords:
@@ -219,9 +223,11 @@ class ThreadClass(QtCore.QThread):
                         print('Signal 2')
                         self.emit(QtCore.SIGNAL('MOSTRAR_VIDEO_2'))
                     GUIParalela.valorActual = ''
+                    self.emit(QtCore.SIGNAL('BORRAR'))
                     #self.intro.setText(GUIParalela.valorActual)
                 else:
                     GUIParalela.valorActual+= str(valor)
+                    self.emit(QtCore.SIGNAL('INTRODUCI_CARACTER'),valor)
                     #self.intro.setText(GUIParalela.valorActual)
                 
                 
