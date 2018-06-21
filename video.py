@@ -72,6 +72,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         Inicialización de sus parámetros
         """
         # Parte visual
+        self.stack = QStackedWidget (self)
         self.imagen = QtGui.QLabel(self)
         self.pixmapAct = QtGui.QPixmap('./imagenes/logoWeb.png')
         self.imagen.setPixmap(self.pixmapAct)
@@ -83,10 +84,10 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
 
         # Layouts:
         self.layoutVideo1 = QtGui.QVBoxLayout()
-        
-        self.layoutVideo1.addWidget(self.video)
-        self.layoutVideo1.addWidget(self.imagen)
-        self.video.setHidden(True)
+        self.stack.addWidget(self.imagen)
+        self.stack.addWidget(self.video)
+        self.layoutVideo1.addWidget(self.stack)
+        self.stack.setCurrentIndex(0)
         self.dataIntroLayout = QtGui.QHBoxLayout()
         self.passwd = QtGui.QLabel('Contraseña')
         self.intro = QtGui.QLineEdit('')
@@ -153,8 +154,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         """
         Despliega el video 1
         """
-        self.video.setHidden(False)
-        self.imagen.setHidden(True)
+        self.stack.setCurrentIndex(1)
         self.video.load(self.media1)
         self.video.play()
         
@@ -162,14 +162,12 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         """
         Despliega el video 2
         """
-        self.video.setHidden(False)
-        self.imagen.setHidden(True)
+        self.stack.setCurrentIndex(1)
         self.video.load(self.media2)
         self.video.play()
 
     def _terminoVideo(self):
-        self.video.setHidden(True)
-        self.imagen.setHidden(False)
+        self.stack.setCurrentIndex(0)
 
 class ThreadClass(QtCore.QThread):
     """
