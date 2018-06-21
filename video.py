@@ -101,7 +101,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.layoutVideo1.addWidget(self.video)
         self.dataIntroLayout = QtGui.QHBoxLayout()
         self.passwd = QtGui.QLabel('Contraseña')
-        #self.intro = QtGui.QLineEdit('Contraseña')
+        self.intro = QtGui.QLineEdit('')
         self.dataIntroLayout.addWidget(self.passwd)
         self.dataIntroLayout.addWidget(self.intro)
         self.layoutVideo1.addLayout(self.dataIntroLayout)
