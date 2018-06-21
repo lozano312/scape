@@ -143,8 +143,15 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         if e.key() == QtCore.Qt.Key_Escape:
             self.close()
     
-    def actualizarTexto(self,valor):
-        formatoFecha = GUIParalela.valorActual[0:2]+'/'+GUIParalela.valorActual[2:4]+'/'+GUIParalela.valorActual[4:8]+'/'
+    def actualizarTexto(self):
+        longitud = len(formatoFecha)
+        if longitud>=5:
+            formatoFecha = GUIParalela.valorActual[0:2]+'/'+GUIParalela.valorActual[2:4]+'/'+GUIParalela.valorActual[4:]+'/'
+        elif longitud>=3:
+            formatoFecha = GUIParalela.valorActual[0:2]+'/'+GUIParalela.valorActual[2:]
+        else:
+            formatoFecha = GUIParalela.valorActual[0:]
+        
         self.intro.setText(formatoFecha)
 
     def borrarTexto(self):
