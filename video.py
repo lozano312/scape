@@ -75,7 +75,6 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.imagen = QtGui.QLabel(self)
         self.pixmapAct = QtGui.QPixmap('./imagenes/logoWeb.png')
         self.imagen.setPixmap(self.pixmapAct)
-        self.media0 = Phonon.MediaSource('./imagenes/logoWeb.png')
         self.media1 = Phonon.MediaSource('./videos/1.avi')
         
         self.video.load(self.media1)
@@ -86,6 +85,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         
         self.layoutVideo1.addWidget(self.video)
         self.layoutVideo1.addWidget(self.imagen)
+        self.layoutVideo1.setAlignment(self.imagen, QtCore.Qt.AlignHCenter)
         self.video.setHidden(True)
         self.dataIntroLayout = QtGui.QHBoxLayout()
         self.passwd = QtGui.QLabel('Contraseña')
