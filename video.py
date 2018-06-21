@@ -210,18 +210,13 @@ class ThreadClass(QtCore.QThread):
                 
 if __name__ == '__main__':
     """
-    Este pequeno script demostrativo muestra que la interfaz puede ser creada sin interferir con el programa principal
+    Video response
     """
-    p = GUIParalela(fullScreen=False)
-    """
-    enviandoValores = True
-    while enviandoValores:
-        sleep(1)
-        myInput = str(input('Ingrese Contraseña: '))
-        if myInput == '0':
-            break
-        GUIParalela.myQueue.put(myInput)
-    """
-    
+    pantalla = False
+    for input in sys.argv:
+        if input == 'Full':
+            pantalla = True
+    p = GUIParalela(fullScreen=pantalla)
+
     p.process.join() 
 
