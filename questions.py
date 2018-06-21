@@ -88,7 +88,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.respuestaLabel = QtGui.QLabel('Respuesta:')
         self.intro = QtGui.QLineEdit('')
         self.intro.setMaximumWidth(400)
-        self.intro.setPointSize(24)
+        self.intro.setFont(QtGui.QFont('SansSerif', 24))
         self.pregunta = QtGui.QLabel()
         self.pregunta.setFont(QtGui.QFont('SansSerif', 36))
         self.layoutTotalHorizontal = QtGui.QHBoxLayout()
