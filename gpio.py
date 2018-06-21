@@ -28,7 +28,7 @@ class MembraneMatrix():
 	def loop(self):
 		try:
 			while(True):
-				time.sleep(0.2)
+				time.sleep(0.05)
 				for j in range(4):
 					GPIO.output(MembraneMatrix.COL[j],0)
 					for i in range(4):
