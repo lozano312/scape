@@ -58,13 +58,14 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
             valores = pregunta.split(';')
             if len(valores) ==3:
                 self.listaPreguntas.append(valores)
-                print('Agregado: ',self.listaPreguntas[-1])
-        print('Total: ',self.listaPreguntas)
+                #print('Agregado: ',self.listaPreguntas[-1])
+        #print('Total: ',self.listaPreguntas)
         self.estadoActual = 0
         
         self.thread.start()
         self.connect(self.thread,QtCore.SIGNAL("INTRODUCI_CARACTER"),self.actualizarTexto)
         self.connect(self.thread,QtCore.SIGNAL("BORRAR"),self.borrarTexto)
+        self.connect(self.thread,QtCore.SIGNAL("REVISAR"),self.revisarRespuesta)
 
         # Clases auxiliares: 
         self.initUI()
@@ -82,14 +83,8 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         """
         # Parte visual
         self.imagen = QtGui.QLabel(self)
-        
-        self.pixmapAct = QtGui.QPixmap('./database/{}.png'.format(self.listaPreguntas[self.estadoActual][0]))
-        self.imagen.setPixmap(self.pixmapAct)
-        self.pregunta = QtGui.QLabel(self.listaPreguntas[self.estadoActual][1])
         self.respuestaLabel = QtGui.QLabel('Respuesta:')
         self.intro = QtGui.QLineEdit('')
-
-        # Layouts:
         self.layoutTotalHorizontal = QtGui.QHBoxLayout()
         
         self.imagenIzquierdaLayout = QtGui.QVBoxLayout()
@@ -107,10 +102,9 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.layoutTotalHorizontal.addLayout(self.imagenIzquierdaLayout)
         self.layoutTotalHorizontal.addLayout(self.preguntasDerechaLayout)
 
-        self.setLayout(self.layoutTotalHorizontal)
+        self.actualizarLayout()
         
         self.setMinimumHeight(450)
-        
         
         #self.setGeometry(300, 300, 300, 150)
         # Algunas visualizaciones:
@@ -118,6 +112,11 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         
         self.setWindowTitle(self.titulo)
         
+    def actualizarLayout(self):
+        self.pixmapAct = QtGui.QPixmap('./database/{}.png'.format(self.listaPreguntas[self.estadoActual][0]))
+        self.imagen.setPixmap(self.pixmapAct)
+        self.pregunta = QtGui.QLabel(self.listaPreguntas[self.estadoActual][1])
+        self.setLayout(self.layoutTotalHorizontal)
         
     def displayOverlay(self):
         self.popup = QtGui.QDialog(self,QtCore.Qt.WindowStaysOnTopHint)
@@ -145,7 +144,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
 
         self.popup.move(position_x, position_y)
         #event.accept()
-        self.popup.show() 
+        self.popup.show()
 
     def keyPressEvent(self, e):
         """
@@ -156,6 +155,14 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
     
     def actualizarTexto(self,valor):
         self.intro.setText(self.intro.text()+str(valor))
+
+    def revisarRespuesta(self):
+        if self.intro.text() == self.listaPreguntas[self.estadoActual][1]:
+            print(' Correcta')
+            self.estadoActual += 1
+            self.actualizarLayout()
+        else:
+            print(' Incorrecta')
 
     def borrarTexto(self):
         self.intro.setText('')
@@ -182,6 +189,7 @@ class ThreadClass(QtCore.QThread):
                 if valor == '*':
                     print('Introducido: ',GUIParalela.valorActual)
                     print('Y la respuesta es.... ')
+                    self.emit(QtCore.SIGNAL('REVISAR'))
                     """
                     if GUIParalela.valorActual in self.listaPreguntas:
                         print(' Correcta')
