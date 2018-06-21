@@ -104,7 +104,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
 
         self.preguntasDerechaLayout.addWidget(self.pregunta)
         self.preguntasDerechaLayout.addLayout(self.smallLayout)
-        self.preguntasDerechaLayout.layout.setAlignment(QtCore.Qt.AlignTop)
+        self.preguntasDerechaLayout.setAlignment(self.smallLayout, QtCore.Qt.AlignVCenter)
 
         self.imagenIzquierdaLayout.addWidget(self.imagen)
 
