@@ -122,12 +122,13 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.setWindowTitle(self.titulo)
         
     def actualizarLayout(self,estado):
-        self.pixmapAct = QtGui.QPixmap('./database/{}.png'.format(self.listaPreguntas[estado-1][0]))
-        self.imagen.setPixmap(self.pixmapAct)
-        self.pregunta.setText(self.listaPreguntas[estado-1][1])
-        self.setLayout(self.layoutTotalHorizontal)
         if estado == 0:
             self.pregunta.setText('GANASTE!')
+        else:
+            self.pixmapAct = QtGui.QPixmap('./database/{}.png'.format(self.listaPreguntas[estado-1][0]))
+            self.imagen.setPixmap(self.pixmapAct)
+            self.pregunta.setText(self.listaPreguntas[estado-1][1])
+        self.setLayout(self.layoutTotalHorizontal)
         
     def displayOverlay(self):
         self.popup = QtGui.QDialog(self,QtCore.Qt.WindowStaysOnTopHint)
