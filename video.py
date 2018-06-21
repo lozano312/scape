@@ -144,7 +144,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
             self.close()
     
     def actualizarTexto(self,valor):
-        formatoFecha = GUIParalela.valorActual[0:2]+'/'GUIParalela.valorActual[2:4]+'/'GUIParalela.valorActual[4:8]+'/'
+        formatoFecha = GUIParalela.valorActual[0:2]+'/'+GUIParalela.valorActual[2:4]+'/'+GUIParalela.valorActual[4:8]+'/'
         self.intro.setText(formatoFecha)
 
     def borrarTexto(self):
