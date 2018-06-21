@@ -61,6 +61,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
                 #print('Agregado: ',self.listaPreguntas[-1])
         #print('Total: ',self.listaPreguntas)
         self.estadoActual = 0
+        self.maximoNuemeroPreguntas = len(self.listaPreguntas)
         
         self.thread.start()
         self.connect(self.thread,QtCore.SIGNAL("INTRODUCI_CARACTER"),self.actualizarTexto)
@@ -87,6 +88,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.intro = QtGui.QLineEdit('')
         self.pregunta = QtGui.QLabel()
         self.layoutTotalHorizontal = QtGui.QHBoxLayout()
+        self.layoutGanador = QtGui.QHBoxLayout()
         
         self.imagenIzquierdaLayout = QtGui.QVBoxLayout()
         self.preguntasDerechaLayout = QtGui.QVBoxLayout()
@@ -163,7 +165,13 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         if self.intro.text() == self.listaPreguntas[self.estadoActual][2]:
             print(' Correcta')
             self.estadoActual += 1
-            self.actualizarLayout()
+            if self.estadoActual == self.maximoNuemeroPreguntas:
+                self.pixmapAct = QtGui.QPixmap('./database/0.png')
+                self.imagen.setPixmap(self.pixmapAct)
+                self.layoutGanador.setWidget(self.imagen)
+                self.setLayout(self.layoutGanador)
+            else:
+                self.actualizarLayout()
         else:
             print(' Incorrecta')
 
