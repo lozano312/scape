@@ -35,7 +35,7 @@ class MembraneMatrix():
 						if GPIO.input(MembraneMatrix.ROW[i]) == 0:
 							#print(MembraneMatrix.MATRIX[i][j])
 							MembraneMatrix.teclas.put(MembraneMatrix.MATRIX[i][j])
-							print(MembraneMatrix.MATRIX[i][j])
+							#print(MembraneMatrix.MATRIX[i][j])
 							"""
 							MembraneMatrix.palabraIngresada += MembraneMatrix.MATRIX[i][j]
 							if MembraneMatrix.MATRIX[i][j] == '*':
