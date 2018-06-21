@@ -54,7 +54,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.connect(self.thread,QtCore.SIGNAL('MOSTRAR_VIDEO_1'),self._mostrarVideo1)
         self.connect(self.thread,QtCore.SIGNAL('MOSTRAR_VIDEO_2'),self._mostrarVideo2)
         self.connect(self.video,QtCore.SIGNAL("finished()"),self._terminoVideo)
-        self.connect(self.thread,QtCore.SIGNAL("INTRODUCI_CARACTER"),self.actualizarTexto)
+        self.connect(self.thread,QtCore.SIGNAL("ACTUALIZAR"),self.actualizarTexto)
         self.connect(self.thread,QtCore.SIGNAL("BORRAR"),self.borrarTexto)
 
         # Clases auxiliares: 
@@ -88,7 +88,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.layoutVideo1.setAlignment(self.imagen, QtCore.Qt.AlignHCenter)
         self.video.setHidden(True)
         self.dataIntroLayout = QtGui.QHBoxLayout()
-        self.passwd = QtGui.QLabel('Contraseña')
+        self.passwd = QtGui.QLabel('Ingrese valor')
         self.intro = QtGui.QLineEdit('')
         self.dataIntroLayout.addWidget(self.passwd)
         self.dataIntroLayout.addWidget(self.intro)
@@ -144,7 +144,8 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
             self.close()
     
     def actualizarTexto(self,valor):
-        self.intro.setText(self.intro.text()+str(valor))
+        formatoFecha = GUIParalela.valorActual[0:2]+'/'GUIParalela.valorActual[2:4]+'/'GUIParalela.valorActual[4:8]+'/'
+        self.intro.setText(formatoFecha)
 
     def borrarTexto(self):
         self.intro.setText('')
@@ -213,7 +214,7 @@ class ThreadClass(QtCore.QThread):
                         self.emit(QtCore.SIGNAL('BORRAR'))
                     else:
                         GUIParalela.valorActual+= str(valor)
-                        self.emit(QtCore.SIGNAL('INTRODUCI_CARACTER'),valor)
+                        self.emit(QtCore.SIGNAL('ACTUALIZAR'))
                     #self.intro.setText(GUIParalela.valorActual)
                 
                 
