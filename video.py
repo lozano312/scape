@@ -165,7 +165,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         pass
     
     def actualizarTexto(self,valor):
-        self.intro.setText(self.intro.text()+valor)
+        self.intro.setText(self.intro.text()+str(valor))
 
     def _mostrarVideo1(self):
         """
