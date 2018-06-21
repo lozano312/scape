@@ -169,7 +169,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
             if self.estadoActual == self.maximoNuemeroPreguntas:
                 self.pixmapAct = QtGui.QPixmap('./database/0.png')
                 self.imagen.setPixmap(self.pixmapAct)
-                self.respuestaLabelsetText('Ganáste!')
+                self.respuestaLabel.setText('Ganáste!')
                 self.pregunta.setText('')
                 self.setLayout(self.layoutTotalHorizontal)
                 time.sleep(16)
