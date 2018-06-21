@@ -226,8 +226,12 @@ class ThreadClass(QtCore.QThread):
                     self.emit(QtCore.SIGNAL('BORRAR'))
                     #self.intro.setText(GUIParalela.valorActual)
                 else:
-                    GUIParalela.valorActual+= str(valor)
-                    self.emit(QtCore.SIGNAL('INTRODUCI_CARACTER'),valor)
+                    if valor == '#':
+                        GUIParalela.valorActual = ''
+                        self.emit(QtCore.SIGNAL('BORRAR'))
+                    else:
+                        GUIParalela.valorActual+= str(valor)
+                        self.emit(QtCore.SIGNAL('INTRODUCI_CARACTER'),valor)
                     #self.intro.setText(GUIParalela.valorActual)
                 
                 
