@@ -51,7 +51,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.titulo = 'Scape Room 2'
         self.thread = ThreadClass(fila)
 
-        self.passwords =[] #id,pregunta,respuesta
+        self.listaPreguntas =[] #id,pregunta,respuesta
         with open('./database/quest', 'r') as f:
             readData = f.read()
         for pregunta in readData.split('\n'):
@@ -81,9 +81,9 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         # Parte visual
         self.imagen = QtGui.QLabel(self)
         
-        self.pixmapAct = QtGui.QPixmap('./database/{}.png'.format(self.passwords.append[self.estadoActual][0]))
+        self.pixmapAct = QtGui.QPixmap('./database/{}.png'.format(self.listaPreguntas[self.estadoActual][0]))
         self.imagen.setPixmap(self.pixmapAct)
-        self.pregunta = QtGui.QLabel(self.passwords.append[self.estadoActual][1])
+        self.pregunta = QtGui.QLabel(self.listaPreguntas[self.estadoActual][1])
         self.respuestaLabel = QtGui.QLabel('Respuesta:')
         self.intro = QtGui.QLineEdit('')
 
@@ -179,12 +179,13 @@ class ThreadClass(QtCore.QThread):
                 
                 if valor == '*':
                     print('Introducido: ',GUIParalela.valorActual)
-                    if GUIParalela.valorActual in self.passwords:
-                        print('Signal 1')
-                        self.emit(QtCore.SIGNAL('MOSTRAR_VIDEO_1'))
+                    print('Y la respuesta es.... ')
+                    """
+                    if GUIParalela.valorActual in self.listaPreguntas:
+                        print(' Correcta')
                     else:
-                        print('Signal 2')
-                        self.emit(QtCore.SIGNAL('MOSTRAR_VIDEO_2'))
+                        print(' Incorrecta')
+                    """
                     GUIParalela.valorActual = ''
                     self.emit(QtCore.SIGNAL('BORRAR'))
                     #self.intro.setText(GUIParalela.valorActual)
