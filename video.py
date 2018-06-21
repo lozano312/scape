@@ -235,7 +235,7 @@ if __name__ == '__main__':
     """
     Este pequeno script demostrativo muestra que la interfaz puede ser creada sin interferir con el programa principal
     """
-    p = GUIParalela(fullScreen=True)
+    p = GUIParalela(fullScreen=False)
     """
     enviandoValores = True
     while enviandoValores:
