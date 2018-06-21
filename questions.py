@@ -170,6 +170,9 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
                 self.imagen.setPixmap(self.pixmapAct)
                 self.layoutGanador.addWidget(self.imagen)
                 self.setLayout(self.layoutGanador)
+                time.sleep(10)
+                self.estadoActual = 0
+                self.actualizarLayout()
             else:
                 self.actualizarLayout()
         else:
