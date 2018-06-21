@@ -213,12 +213,6 @@ class ThreadClass(QtCore.QThread):
                     print('Introducido: ',GUIParalela.valorActual)
                     print('Y la respuesta es.... ')
                     self.emit(QtCore.SIGNAL('REVISAR'))
-                    """
-                    if GUIParalela.valorActual in self.listaPreguntas:
-                        print(' Correcta')
-                    else:
-                        print(' Incorrecta')
-                    """
                     GUIParalela.valorActual = ''
                     self.emit(QtCore.SIGNAL('BORRAR'))
                     #self.intro.setText(GUIParalela.valorActual)
