@@ -123,6 +123,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         
     def actualizarLayout(self,estado):
         if estado == 0:
+            self.pixmapAct = QtGui.QPixmap('./database/0.png')
             self.pregunta.setText('GANASTE!')
         else:
             self.pixmapAct = QtGui.QPixmap('./database/{}.png'.format(self.listaPreguntas[estado-1][0]))
