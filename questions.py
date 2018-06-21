@@ -85,7 +85,9 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.preguntasDerechaLayout = QtGui.QVBoxLayout()
         self.smallLayout = QtGui.QHBoxLayout()
         
-        self.smallLayout.addWidget(self.respuestaLabel,self.intro)
+        self.smallLayout.addWidget(self.respuestaLabel)
+        self.smallLayout.addWidget(self.intro)
+        
         self.preguntasDerechaLayout.addWidget(self.pregunta)
         self.preguntasDerechaLayout.addLayout(self.smallLayout)
 
