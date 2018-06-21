@@ -212,10 +212,10 @@ class ThreadClass(QtCore.QThread):
                     else:
                         self.emit(QtCore.SIGNAL('MOSTRAR_VIDEO_2'))
                     GUIParalela.valorActual = ''
-                    self.intro.setText(GUIParalela.valorActual)
+                    #self.intro.setText(GUIParalela.valorActual)
                 else:
-                     GUIParalela.valorActual+= str(valor)
-                     self.intro.setText(GUIParalela.valorActual)
+                    GUIParalela.valorActual+= str(valor)
+                    #self.intro.setText(GUIParalela.valorActual)
                 
                 
 if __name__ == '__main__':
