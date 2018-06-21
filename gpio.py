@@ -1,7 +1,10 @@
 import time
 import RPi.GPIO as GPIO
+from multiprocessing import Queue
 
 class MembraneMatrix():
+	teclas = Queue()
+	palabraIngresada = ''
 	MATRIX = [	[1,2,3,'A'],
 				[4,5,6,'B'],
 				[7,8,9,'C'],
@@ -28,7 +31,16 @@ class MembraneMatrix():
 					GPIO.output(MembraneMatrix.COL[j],0)
 					for i in range(4):
 						if GPIO.input(MembraneMatrix.ROW[i]) == 0:
+							#print(MembraneMatrix.MATRIX[i][j])
+							MembraneMatrix.teclas.put(MembraneMatrix.MATRIX[i][j])
 							print(MembraneMatrix.MATRIX[i][j])
+							"""
+							MembraneMatrix.palabraIngresada += MembraneMatrix.MATRIX[i][j]
+							if MembraneMatrix.MATRIX[i][j] == '*':
+								MembraneMatrix.teclas.put(MembraneMatrix.palabraIngresada)
+								print('Ingreso: ',MembraneMatrix.palabraIngresada)
+								MembraneMatrix.palabraIngresada = ''
+							"""
 							while(GPIO.input(MembraneMatrix.ROW[i])==0):
 								pass
 					GPIO.output(MembraneMatrix.COL[j],1)
