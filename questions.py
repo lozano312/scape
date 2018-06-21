@@ -26,14 +26,7 @@ class GUIParalela():
         bool simulation = Falso por defecto, corre una simulación de la activación y desactivación de la alarma por un minuto con datos simulados en forma de variable de clase
         bool fullScreen = True por defecto, corre la GUI en modo de pantalla total, lo que se espera en su funcionamiento normal
         """
-        self.passwords =[] #id,pregunta,respuesta
-        with open('./database/quest', 'r') as f:
-            readData = f.read()
-        for pregunta in readData.split('\n'):
-            if len(pregunta)==3:
-                (number,question,answer) = pregunta.split(';')
-                self.pregunta.append((number,question,answer)) 
-        self.estadoActual = 0
+
         self.process = multiprocessing.Process(target=self._correrGui,args=(fullScreen,))
         self.process.start()
         
@@ -55,8 +48,17 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         #super(InterfazVideo, self).__init__(parent)
         QtGui.QWidget.__init__(self, None, QtCore.Qt.WindowStaysOnTopHint)
         # Parámetros constantes:
-        self.titulo = 'Scape Room'
+        self.titulo = 'Scape Room 2'
         self.thread = ThreadClass(fila)
+
+        self.passwords =[] #id,pregunta,respuesta
+        with open('./database/quest', 'r') as f:
+            readData = f.read()
+        for pregunta in readData.split('\n'):
+            if len(pregunta)==3:
+                (number,question,answer) = pregunta.split(';')
+                self.pregunta.append((number,question,answer)) 
+        self.estadoActual = 0
         
         self.thread.start()
         self.connect(self.thread,QtCore.SIGNAL("INTRODUCI_CARACTER"),self.actualizarTexto)
@@ -78,7 +80,6 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         """
         # Parte visual
         self.imagen = QtGui.QLabel(self)
-        self.passwords.append[self.estadoActual]#((number,question,answer)) 
         
         self.pixmapAct = QtGui.QPixmap('./database/{}.png'.format(self.passwords.append[self.estadoActual][0]))
         self.imagen.setPixmap(self.pixmapAct)
