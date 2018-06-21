@@ -10,16 +10,14 @@ class MembraneMatrix():
 	ROW = [29,31,33,35]
 	COL = [37,36,38,40]
 
-
-
 	def __init__(self):
 		GPIO.setmode(GPIO.BOARD)
 		for j in range(4):
-			GPIO.setup(COL[j],GPIO.OUT)
-			GPIO.output(COL[j],1)
+			GPIO.setup(MembraneMatrix.COL[j],GPIO.OUT)
+			GPIO.output(MembraneMatrix.COL[j],1)
 			
 		for i in range(4):
-			GPIO.setup(ROW[i],GPIO.IN,pull_up_down = GPIO.PUD_UP)
+			GPIO.setup(MembraneMatrix.ROW[i],GPIO.IN,pull_up_down = GPIO.PUD_UP)
 		self.loop()
 
 	def loop(self):
