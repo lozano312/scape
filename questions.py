@@ -61,7 +61,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
                 self.listaPreguntas.append(valores)
                 #print('Agregado: ',self.listaPreguntas[-1])
         #print('Total: ',self.listaPreguntas)
-        self.estadoActual = 0
+        self.estadoActual = 1
         self.maximoNuemeroPreguntas = len(self.listaPreguntas)
         
         self.thread.start()
@@ -106,7 +106,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.layoutTotalHorizontal.addLayout(self.imagenIzquierdaLayout)
         self.layoutTotalHorizontal.addLayout(self.preguntasDerechaLayout)
 
-        self.actualizarLayout()
+        self.actualizarLayout(self.estadoActual)
         
         self.setMinimumHeight(450)
         
@@ -116,11 +116,18 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         
         self.setWindowTitle(self.titulo)
         
-    def actualizarLayout(self):
-        self.pixmapAct = QtGui.QPixmap('./database/{}.png'.format(self.listaPreguntas[self.estadoActual][0]))
+    def actualizarLayout(self,estado):
+        self.pixmapAct = QtGui.QPixmap('./database/{}.png'.format(self.listaPreguntas[estado][0]))
         self.imagen.setPixmap(self.pixmapAct)
-        self.pregunta.setText(self.listaPreguntas[self.estadoActual][1])
+        self.pregunta.setText(self.listaPreguntas[estado][1])
         self.setLayout(self.layoutTotalHorizontal)
+        """
+        self.pixmapAct = QtGui.QPixmap('./database/0.png')
+                self.imagen.setPixmap(self.pixmapAct)
+                self.respuestaLabel.setText('Ganáste!')
+                self.pregunta.setText('')
+                self.setLayout(self.layoutTotalHorizontal)
+        """
         
     def displayOverlay(self):
         self.popup = QtGui.QDialog(self,QtCore.Qt.WindowStaysOnTopHint)
@@ -167,16 +174,12 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
             print(' Correcta')
             self.estadoActual += 1
             if self.estadoActual == self.maximoNuemeroPreguntas:
-                self.pixmapAct = QtGui.QPixmap('./database/0.png')
-                self.imagen.setPixmap(self.pixmapAct)
-                self.respuestaLabel.setText('Ganáste!')
-                self.pregunta.setText('')
-                self.setLayout(self.layoutTotalHorizontal)
-                time.sleep(16)
-                self.estadoActual = 0
-                self.actualizarLayout()
+                self.actualizarLayout(0)
+                time.sleep(10)
+                self.estadoActual = 1
+                self.actualizarLayout(self.estadoActual)
             else:
-                self.actualizarLayout()
+                self.actualizarLayout(self.estadoActual)
         else:
             print(' Incorrecta')
 
