@@ -85,6 +85,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.imagen = QtGui.QLabel(self)
         self.respuestaLabel = QtGui.QLabel('Respuesta:')
         self.intro = QtGui.QLineEdit('')
+        self.pregunta = QtGui.QLabel()
         self.layoutTotalHorizontal = QtGui.QHBoxLayout()
         
         self.imagenIzquierdaLayout = QtGui.QVBoxLayout()
@@ -115,7 +116,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
     def actualizarLayout(self):
         self.pixmapAct = QtGui.QPixmap('./database/{}.png'.format(self.listaPreguntas[self.estadoActual][0]))
         self.imagen.setPixmap(self.pixmapAct)
-        self.pregunta = QtGui.QLabel(self.listaPreguntas[self.estadoActual][1])
+        self.pregunta.setText(self.listaPreguntas[self.estadoActual][1])
         self.setLayout(self.layoutTotalHorizontal)
         
     def displayOverlay(self):
