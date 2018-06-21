@@ -3,6 +3,7 @@
 # Oruro, Bolivia
 
 import sys
+import time
 import multiprocessing
 from PyQt4 import QtGui, QtCore
 from time import sleep, strftime
