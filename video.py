@@ -216,7 +216,7 @@ class ThreadClass(QtCore.QThread):
                 
                 if valor == '*':
                     print('Introducido: ',GUIParalela.valorActual)
-                    if int(GUIParalela.valorActual) in self.passwords:
+                    if GUIParalela.valorActual in self.passwords:
                         print('Signal 1')
                         self.emit(QtCore.SIGNAL('MOSTRAR_VIDEO_1'))
                     else:
