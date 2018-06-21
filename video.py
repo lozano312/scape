@@ -146,7 +146,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
     def actualizarTexto(self):
         longitud = len(GUIParalela.valorActual)
         if longitud>=5:
-            formatoFecha = GUIParalela.valorActual[0:2]+'/'+GUIParalela.valorActual[2:4]+'/'+GUIParalela.valorActual[4:]+'/'
+            formatoFecha = GUIParalela.valorActual[0:2]+'/'+GUIParalela.valorActual[2:4]+'/'+GUIParalela.valorActual[4:]
         elif longitud>=3:
             formatoFecha = GUIParalela.valorActual[0:2]+'/'+GUIParalela.valorActual[2:]
         else:
