@@ -51,7 +51,7 @@ class PopUp(QtGui.QWidget):         #QWidget #QMainWindow
         self.titulo = 'Revisando'
         self.etiqueta = QtGui.QLabel('Correcta')
         self.imagen = QtGui.QLabel(self)
-        self.imagenCorrecta = QtGui.QPixmap('./imagenes/espera.png')
+        self.imagenCorrecta = QtGui.QPixmap('./imagenes/pensando.png')
 
         self.miLayout = QtGui.QVBoxLayout()
         self.miLayout.addWidget(self.imagen)
