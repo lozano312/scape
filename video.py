@@ -130,7 +130,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.layoutVideo1.addWidget(self.video2)
         
         self.layoutVideo1.setAlignment(self.imagen, QtCore.Qt.AlignHCenter)
-        self.imagenEspera.setHidden(True)
+        
         self.video1.setHidden(True)
         self.video2.setHidden(True)
         self.dataIntroLayout = QtGui.QHBoxLayout()
