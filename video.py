@@ -4,7 +4,7 @@
 
 import sys
 import multiprocessing
-from PyQt4 import QtGui, QtCore
+from PyQt4 import QtGui, QtCore, QtTest
 from PyQt4.phonon import Phonon
 from time import sleep, strftime
 from gpio import MembraneMatrix
@@ -82,8 +82,11 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         """
         # Parte visual
         self.imagen = QtGui.QLabel(self)
+        self.imagenEspera = QtGui.QLabel(self)
         self.pixmapAct = QtGui.QPixmap('./imagenes/logoWeb.png')
+        self.espera = QtGui.QPixmap('./imagenes/pensando.png')
         self.imagen.setPixmap(self.pixmapAct)
+        self.imagenEspera.setPixmap(self.espera)
         self.media1 = Phonon.MediaSource('./videos/1.avi')
         self.media2 = Phonon.MediaSource('./videos/2.avi')
 
@@ -93,10 +96,13 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         # Layouts:
         self.layoutVideo1 = QtGui.QVBoxLayout()
         
+        self.layoutVideo1.addWidget(self.imagen)
+        self.layoutVideo1.addWidget(self.imagenEspera)
         self.layoutVideo1.addWidget(self.video1)
         self.layoutVideo1.addWidget(self.video2)
-        self.layoutVideo1.addWidget(self.imagen)
+        
         self.layoutVideo1.setAlignment(self.imagen, QtCore.Qt.AlignHCenter)
+        self.imagenEspera.setHidden(True)
         self.video1.setHidden(True)
         self.video2.setHidden(True)
         self.dataIntroLayout = QtGui.QHBoxLayout()
@@ -181,6 +187,10 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.imagen.setHidden(True)
         self.video1.setHidden(False)
         self.video1.play()
+        self.imagenEspera.setHidden(False)
+        QtTest.QTest.qWait(1000)
+        self.imagenEspera.setHidden(True)
+        
         
     def _mostrarVideo2(self):
         """
@@ -189,6 +199,9 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.imagen.setHidden(True)
         self.video2.setHidden(False)
         self.video2.play()
+        self.imagenEspera.setHidden(False)
+        QtTest.QTest.qWait(1000)
+        self.imagenEspera.setHidden(True)
 
     def _terminoVideo(self):
         self.video1.setHidden(True)
