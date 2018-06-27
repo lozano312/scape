@@ -196,8 +196,10 @@ class InterfazPreguntas(QtGui.QWidget):         #QWidget #QMainWindow
                 self.actualizarLayout(self.estadoActual)
         else:
             print(' Incorrecta')
+        self.borrarTexto()
 
     def borrarTexto(self):
+        GUIParalela.valorActual = ''
         self.intro.setText('')
 
 class ThreadClass(QtCore.QThread):
@@ -223,8 +225,6 @@ class ThreadClass(QtCore.QThread):
                     print('Introducido: ',GUIParalela.valorActual)
                     print('Y la respuesta es.... ')
                     self.emit(QtCore.SIGNAL('REVISAR'))
-                    GUIParalela.valorActual = ''
-                    self.emit(QtCore.SIGNAL('BORRAR'))
                     #self.intro.setText(GUIParalela.valorActual)
                 else:
                     if valor == '#':
