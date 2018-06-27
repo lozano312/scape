@@ -57,7 +57,6 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.connect(self.video1,QtCore.SIGNAL("finished()"),self._terminoVideo)
         self.connect(self.video2,QtCore.SIGNAL("finished()"),self._terminoVideo)
         self.connect(self.thread,QtCore.SIGNAL("ACTUALIZAR"),self.actualizarTexto)
-        self.connect(self.thread,QtCore.SIGNAL("BORRAR"),self.borrarTexto)
 
         # Clases auxiliares: 
         self.initUI()
