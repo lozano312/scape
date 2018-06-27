@@ -6,7 +6,7 @@ import sys
 import time
 import multiprocessing
 import RPi.GPIO as GPIO
-from PyQt4 import QtGui, QtCore
+from PyQt4 import QtGui, QtCore, QTest
 from time import sleep, strftime
 from gpio import MembraneMatrix
 
@@ -69,7 +69,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.connect(self.thread,QtCore.SIGNAL("INTRODUCI_CARACTER"),self.actualizarTexto)
         self.connect(self.thread,QtCore.SIGNAL("BORRAR"),self.borrarTexto)
         self.connect(self.thread,QtCore.SIGNAL("REVISAR"),self.revisarRespuesta)
-        self.sleepTimer = QtCore.QTimer()
+        #self.sleepTimer = QtCore.QTimer()
         # Clases auxiliares: 
         self.initGPIO()
         self.initUI()
@@ -186,8 +186,9 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
             if self.estadoActual == self.maximoNuemeroPreguntas+1:
                 self.actualizarLayout(0)
                 GPIO.output(7, GPIO.HIGH)
-                self.sleepTimer.singleShot(2000,lambda: self.intro.setText(''))
-                self.sleepTimer.start(10000)
+                #self.sleepTimer.singleShot(2000,lambda: self.intro.setText(''))
+                #self.sleepTimer.start(10000)
+                QtTest.QTest.qWait(10000)
                 GPIO.output(7, GPIO.LOW)
                 self.estadoActual = 1
                 self.actualizarLayout(self.estadoActual)
