@@ -6,7 +6,7 @@ import sys
 import time
 import multiprocessing
 import RPi.GPIO as GPIO
-from PyQt4 import QtGui, QtCore, QTest
+from PyQt4 import QtGui, QtCore, QtTest
 from time import sleep, strftime
 from gpio import MembraneMatrix
 
