@@ -43,21 +43,28 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
     """
     Interfaz gráfica visual
     """
+    
     def __init__(self,fila,pantallaTotal = True,parent=None):
         #super(InterfazVideo, self).__init__(parent)
         QtGui.QWidget.__init__(self, None, QtCore.Qt.WindowStaysOnTopHint)
         # Parámetros constantes:
         self.titulo = 'Scape Room'
-        self.thread = ThreadClass(fila)
+        self.thread = ThreadClass()
         self.video1 = Phonon.VideoPlayer(self)
         self.video2 = Phonon.VideoPlayer(self)
         self.thread.start()
-        self.connect(self.thread,QtCore.SIGNAL('MOSTRAR_VIDEO_1'),self._mostrarVideo1)
-        self.connect(self.thread,QtCore.SIGNAL('MOSTRAR_VIDEO_2'),self._mostrarVideo2)
+        self.connect(self.thread,QtCore.SIGNAL('REVISAR'),self.revisarRespuesta)
         self.connect(self.video1,QtCore.SIGNAL("finished()"),self._terminoVideo)
         self.connect(self.video2,QtCore.SIGNAL("finished()"),self._terminoVideo)
         self.connect(self.thread,QtCore.SIGNAL("ACTUALIZAR"),self.actualizarTexto)
-
+        self.intro.returnPressed.connect(self.revisarRespuesta)
+        self.queue = fila
+        self.passwords = []
+        with open('./database/key', 'r') as f:
+            readData = f.read()
+        for password in readData.split('\n'):
+            if len(password)>4:
+                self.passwords.append(password) 
         # Clases auxiliares: 
         self.initUI()
         # Al inicializarse la clase se muestra:
@@ -102,7 +109,6 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         
         self.setMinimumHeight(450)
         
-        
         #self.setGeometry(300, 300, 300, 150)
         # Algunas visualizaciones:
         self.setWindowIcon(QtGui.QIcon('./imagenes/logo.png')) 
@@ -110,6 +116,14 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.setWindowTitle(self.titulo)
         
         
+    def revisarRespuesta(self):
+        if self.intro.text() in self.passwords:
+            print('Signal 1')
+            self._mostrarVideo1()
+        else:
+            print('Signal 2')
+            self._mostrarVideo2()
+
     def displayOverlay(self):
         self.popup = QtGui.QDialog(self,QtCore.Qt.WindowStaysOnTopHint)
         self.popup.setWindowFlags(QtCore.Qt.FramelessWindowHint)
@@ -185,18 +199,11 @@ class ThreadClass(QtCore.QThread):
     """
     Thread para revisión continua de la fila de registros
     """
-    def __init__(self,fila,parent = None):
+    def __init__(self,parent = None):
         """
         Constructor
         """
         super(ThreadClass,self).__init__(parent)
-        self.queue = fila
-        self.passwords = []
-        with open('./database/key', 'r') as f:
-            readData = f.read()
-        for password in readData.split('\n'):
-            if len(password)>4:
-                self.passwords.append(password) 
 
     def run(self):
         """
@@ -207,13 +214,8 @@ class ThreadClass(QtCore.QThread):
                 valor = GUIParalela.miTeclado.teclas.get() # valor = (estado, id, nombre)
                 
                 if valor == '*':
+                    self.emit(QtCore.SIGNAL('REVISAR'))
                     print('Introducido: ',GUIParalela.valorActual)
-                    if GUIParalela.valorActual in self.passwords:
-                        print('Signal 1')
-                        self.emit(QtCore.SIGNAL('MOSTRAR_VIDEO_1'))
-                    else:
-                        print('Signal 2')
-                        self.emit(QtCore.SIGNAL('MOSTRAR_VIDEO_2'))
                     GUIParalela.valorActual = ''
                     self.emit(QtCore.SIGNAL('ACTUALIZAR'))
                     #self.intro.setText(GUIParalela.valorActual)
