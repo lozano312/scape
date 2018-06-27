@@ -56,6 +56,7 @@ class PopUp(QtGui.QWidget):         #QWidget #QMainWindow
         self.miLayout = QtGui.QVBoxLayout()
         self.miLayout.addWidget(self.imagen)
         self.miLayout.addWidget(self.etiqueta)
+        self.miLayout.setAlignment(self.etiqueta, QtCore.Qt.AlignHCenter)
         self.setLayout(self.miLayout)
         self.setWindowTitle(self.titulo)
         resolution = QtGui.QDesktopWidget().screenGeometry()
