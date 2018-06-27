@@ -49,7 +49,8 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         # Parámetros constantes:
         self.titulo = 'Scape Room'
         self.thread = ThreadClass(fila)
-        self.video = Phonon.VideoPlayer(self)
+        self.video1 = Phonon.VideoPlayer(self)
+        self.video2 = Phonon.VideoPlayer(self)
         self.thread.start()
         self.connect(self.thread,QtCore.SIGNAL('MOSTRAR_VIDEO_1'),self._mostrarVideo1)
         self.connect(self.thread,QtCore.SIGNAL('MOSTRAR_VIDEO_2'),self._mostrarVideo2)
@@ -77,16 +78,19 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.imagen.setPixmap(self.pixmapAct)
         self.media1 = Phonon.MediaSource('./videos/1.avi')
         
-        self.video.load(self.media1)
+        self.video1.load(self.media1)
+        self.video2.load(self.media2)
         self.media2 = Phonon.MediaSource('./videos/2.avi')
 
         # Layouts:
         self.layoutVideo1 = QtGui.QVBoxLayout()
         
-        self.layoutVideo1.addWidget(self.video)
+        self.layoutVideo1.addWidget(self.video1)
+        self.layoutVideo1.addWidget(self.video2)
         self.layoutVideo1.addWidget(self.imagen)
         self.layoutVideo1.setAlignment(self.imagen, QtCore.Qt.AlignHCenter)
-        self.video.setHidden(True)
+        self.video1.setHidden(True)
+        self.video2.setHidden(True)
         self.dataIntroLayout = QtGui.QHBoxLayout()
         self.passwd = QtGui.QLabel('Ingrese valor')
         self.intro = QtGui.QLineEdit('')
@@ -95,8 +99,6 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.layoutVideo1.addLayout(self.dataIntroLayout)
 
         self.setLayout(self.layoutVideo1)
-        
-        self.video.play()
         
         self.setMinimumHeight(450)
         
@@ -161,22 +163,23 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         """
         Despliega el video 1
         """
-        self.video.setHidden(False)
+        self.video1.setHidden(False)
         self.imagen.setHidden(True)
-        self.video.load(self.media1)
-        self.video.play()
+        
+        self.video1.play()
         
     def _mostrarVideo2(self):
         """
         Despliega el video 2
         """
-        self.video.setHidden(False)
+        self.video2.setHidden(False)
         self.imagen.setHidden(True)
-        self.video.load(self.media2)
-        self.video.play()
+        
+        self.video2.play()
 
     def _terminoVideo(self):
-        self.video.setHidden(True)
+        self.video1.setHidden(True)
+        self.video2.setHidden(True)
         self.imagen.setHidden(False)
 
 class ThreadClass(QtCore.QThread):
