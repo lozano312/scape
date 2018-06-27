@@ -69,7 +69,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.connect(self.thread,QtCore.SIGNAL("INTRODUCI_CARACTER"),self.actualizarTexto)
         self.connect(self.thread,QtCore.SIGNAL("BORRAR"),self.borrarTexto)
         self.connect(self.thread,QtCore.SIGNAL("REVISAR"),self.revisarRespuesta)
-
+        self.sleepTimer = QtCore.QTimer()
         # Clases auxiliares: 
         self.initGPIO()
         self.initUI()
@@ -186,7 +186,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
             if self.estadoActual == self.maximoNuemeroPreguntas+1:
                 self.actualizarLayout(0)
                 GPIO.output(7, GPIO.HIGH)
-                QtCore.QTimer.singleShot(2000,lambda: self.intro.setText(''))
+                self.sleepTimer.singleShot(2000,lambda: self.intro.setText(''))
                 GPIO.output(7, GPIO.LOW)
                 self.estadoActual = 1
                 self.actualizarLayout(self.estadoActual)
