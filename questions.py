@@ -47,7 +47,7 @@ class PopUp(QtGui.QWidget):         #QWidget #QMainWindow
     Pop up
     """
 
-    def __init__(self,fila,pantallaTotal = True,parent=None):
+    def __init__(self):
         #super(InterfazPreguntas, self).__init__(parent)
         QtGui.QWidget.__init__(self, None, QtCore.Qt.WindowStaysOnTopHint)
         # Parámetros constantes:
