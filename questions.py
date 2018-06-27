@@ -38,16 +38,16 @@ class GUIParalela():
         Metodo auxiliar para paralelizar la interfaz
         """
         app = QtGui.QApplication(sys.argv)
-        interfaz = InterfazVideo(GUIParalela.myQueue,pantallaTotal=fullScreen)
+        interfaz = InterfazPreguntas(GUIParalela.myQueue,pantallaTotal=fullScreen)
         sys.exit(app.exec_())
 
-class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
+class InterfazPreguntas(QtGui.QWidget):         #QWidget #QMainWindow
     """
     Interfaz gráfica visual
     """
 
     def __init__(self,fila,pantallaTotal = True,parent=None):
-        #super(InterfazVideo, self).__init__(parent)
+        #super(InterfazPreguntas, self).__init__(parent)
         QtGui.QWidget.__init__(self, None, QtCore.Qt.WindowStaysOnTopHint)
         # Parámetros constantes:
         self.titulo = 'Scape Room 2'
@@ -64,15 +64,15 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         #print('Total: ',self.listaPreguntas)
         self.estadoActual = 1
         self.maximoNuemeroPreguntas = len(self.listaPreguntas)
-        
-        self.thread.start()
-        self.connect(self.thread,QtCore.SIGNAL("INTRODUCI_CARACTER"),self.actualizarTexto)
-        self.connect(self.thread,QtCore.SIGNAL("BORRAR"),self.borrarTexto)
-        self.connect(self.thread,QtCore.SIGNAL("REVISAR"),self.revisarRespuesta)
-        #self.sleepTimer = QtCore.QTimer()
-        # Clases auxiliares: 
         self.initGPIO()
         self.initUI()
+        
+        self.thread.start()
+        self.connect(self.thread,QtCore.SIGNAL("ACTUALIZAR"),self.actualizarTexto)
+        self.connect(self.thread,QtCore.SIGNAL("BORRAR"),self.borrarTexto)
+        self.connect(self.thread,QtCore.SIGNAL("REVISAR"),self.revisarRespuesta)
+        self.intro.returnPressed.connect(self.revisarRespuesta)
+
         # Al inicializarse la clase se muestra:
         if pantallaTotal:
             self.showFullScreen()
@@ -174,8 +174,8 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         if e.key() == QtCore.Qt.Key_Escape:
             self.close()
     
-    def actualizarTexto(self,valor):
-        self.intro.setText(self.intro.text()+str(valor))
+    def actualizarTexto(self):
+        self.intro.setText(GUIParalela.valorActual)
 
     def revisarRespuesta(self):
         #print('Intro: ',self.intro.text(),type(self.intro.text()))
@@ -228,11 +228,10 @@ class ThreadClass(QtCore.QThread):
                     #self.intro.setText(GUIParalela.valorActual)
                 else:
                     if valor == '#':
-                        GUIParalela.valorActual = ''
-                        self.emit(QtCore.SIGNAL('BORRAR'))
+                        GUIParalela.valorActual = GUIParalela.valorActual[:-1]
                     else:
                         GUIParalela.valorActual+= str(valor)
-                        self.emit(QtCore.SIGNAL('INTRODUCI_CARACTER'),valor)
+                    self.emit(QtCore.SIGNAL('ACTUALIZAR'))
                     #self.intro.setText(GUIParalela.valorActual)
                 
                 
