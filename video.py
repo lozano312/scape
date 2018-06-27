@@ -124,6 +124,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         else:
             print('Signal 2')
             self._mostrarVideo2()
+        self.intro.setText('')
 
     def displayOverlay(self):
         self.popup = QtGui.QDialog(self,QtCore.Qt.WindowStaysOnTopHint)
