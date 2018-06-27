@@ -41,6 +41,20 @@ class GUIParalela():
         interfaz = InterfazPreguntas(GUIParalela.myQueue,pantallaTotal=fullScreen)
         sys.exit(app.exec_())
 
+
+class PopUp(QtGui.QWidget):         #QWidget #QMainWindow
+    """
+    Pop up
+    """
+
+    def __init__(self,fila,pantallaTotal = True,parent=None):
+        #super(InterfazPreguntas, self).__init__(parent)
+        QtGui.QWidget.__init__(self, None, QtCore.Qt.WindowStaysOnTopHint)
+        # Parámetros constantes:
+        self.titulo = 'Respuesta...'
+        self.etiqueta = 'Correcta'
+        self.setWindowTitle(self.titulo)
+
 class InterfazPreguntas(QtGui.QWidget):         #QWidget #QMainWindow
     """
     Interfaz gráfica visual
@@ -51,6 +65,7 @@ class InterfazPreguntas(QtGui.QWidget):         #QWidget #QMainWindow
         QtGui.QWidget.__init__(self, None, QtCore.Qt.WindowStaysOnTopHint)
         # Parámetros constantes:
         self.titulo = 'Scape Room 2'
+        self.miRespuestaEnVentana = PopUp()
         self.thread = ThreadClass(fila)
 
         self.listaPreguntas =[] #id,pregunta,respuesta
@@ -182,12 +197,13 @@ class InterfazPreguntas(QtGui.QWidget):         #QWidget #QMainWindow
         #print('Corr: ',self.listaPreguntas[self.estadoActual][2],type(self.listaPreguntas[self.estadoActual][1]))
         if self.intro.text() == self.listaPreguntas[self.estadoActual-1][2]:
             print(' Correcta')
+            self.miRespuestaEnVentana.etiqueta = 'Correcta!!'
+            self.miRespuestaEnVentana.show()
             self.estadoActual += 1
             if self.estadoActual == self.maximoNuemeroPreguntas+1:
                 self.actualizarLayout(0)
                 GPIO.output(7, GPIO.HIGH)
-                #self.sleepTimer.singleShot(2000,lambda: self.intro.setText(''))
-                #self.sleepTimer.start(10000)
+                self.borrarTexto()
                 QtTest.QTest.qWait(10000)
                 GPIO.output(7, GPIO.LOW)
                 self.estadoActual = 1
@@ -196,6 +212,10 @@ class InterfazPreguntas(QtGui.QWidget):         #QWidget #QMainWindow
                 self.actualizarLayout(self.estadoActual)
         else:
             print(' Incorrecta')
+            self.miRespuestaEnVentana.etiqueta = 'Incorrecta!!'
+            self.miRespuestaEnVentana.show()
+        QtTest.QTest.qWait(2000)
+        self.miRespuestaEnVentana.hide()
         self.borrarTexto()
 
     def borrarTexto(self):
@@ -225,14 +245,13 @@ class ThreadClass(QtCore.QThread):
                     print('Introducido: ',GUIParalela.valorActual)
                     print('Y la respuesta es.... ')
                     self.emit(QtCore.SIGNAL('REVISAR'))
-                    #self.intro.setText(GUIParalela.valorActual)
+
                 else:
                     if valor == '#':
                         GUIParalela.valorActual = GUIParalela.valorActual[:-1]
                     else:
                         GUIParalela.valorActual+= str(valor)
                     self.emit(QtCore.SIGNAL('ACTUALIZAR'))
-                    #self.intro.setText(GUIParalela.valorActual)
                 
                 
 if __name__ == '__main__':
