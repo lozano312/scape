@@ -5,7 +5,8 @@
 import sys
 import time
 import multiprocessing
-from PyQt4 import QtGui, QtCore
+import RPi.GPIO as GPIO
+from PyQt4 import QtGui, QtCore, QtTest
 from time import sleep, strftime
 from gpio import MembraneMatrix
 
@@ -70,6 +71,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.connect(self.thread,QtCore.SIGNAL("REVISAR"),self.revisarRespuesta)
 
         # Clases auxiliares: 
+        self.initGPIO()
         self.initUI()
         # Al inicializarse la clase se muestra:
         if pantallaTotal:
@@ -78,6 +80,10 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
             self.show()
         #self.displayOverlay()
 
+    def initGPIO(self):
+        GPIO.setmode(GPIO.BOARD)
+        GPIO.setup(7, GPIO.OUT) 
+        GPIO.output(7, GPIO.LOW)
 
     def initUI(self):
         """
@@ -179,7 +185,9 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
             self.estadoActual += 1
             if self.estadoActual == self.maximoNuemeroPreguntas+1:
                 self.actualizarLayout(0)
-                time.sleep(10)
+                GPIO.output(7, GPIO.HIGH)
+                QtTest.QtTest.qWait(10000)
+                GPIO.output(7, GPIO.LOW)
                 self.estadoActual = 1
                 self.actualizarLayout(self.estadoActual)
             else:
