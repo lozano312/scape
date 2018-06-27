@@ -77,10 +77,10 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.pixmapAct = QtGui.QPixmap('./imagenes/logoWeb.png')
         self.imagen.setPixmap(self.pixmapAct)
         self.media1 = Phonon.MediaSource('./videos/1.avi')
-        
+        self.media2 = Phonon.MediaSource('./videos/2.avi')
+
         self.video1.load(self.media1)
         self.video2.load(self.media2)
-        self.media2 = Phonon.MediaSource('./videos/2.avi')
 
         # Layouts:
         self.layoutVideo1 = QtGui.QVBoxLayout()
