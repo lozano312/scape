@@ -81,7 +81,7 @@ class PopUp(QtGui.QWidget):         #QWidget #QMainWindow
         self.hide()
 
     def showGanadora(self):
-        self.etiqueta.setText('Respuesta Correcta')
+        self.etiqueta.setText('¡¡Felicidades!!')
         self.imagen.setPixmap(self.imagenGanadora)
         self.show()
         QtTest.QTest.qWait(10000)
@@ -130,7 +130,7 @@ class InterfazPreguntas(QtGui.QWidget):         #QWidget #QMainWindow
     def initGPIO(self):
         GPIO.setmode(GPIO.BOARD)
         GPIO.setup(7, GPIO.OUT) 
-        GPIO.output(7, GPIO.LOW)
+        GPIO.output(7, GPIO.HIGH)
 
     def initUI(self):
         """
@@ -231,9 +231,9 @@ class InterfazPreguntas(QtGui.QWidget):         #QWidget #QMainWindow
             print(' Correcta')
             self.estadoActual += 1
             if self.estadoActual == self.maximoNuemeroPreguntas+1:
-                GPIO.output(7, GPIO.HIGH)
-                self.miRespuestaEnVentana.showGanadora()
                 GPIO.output(7, GPIO.LOW)
+                self.miRespuestaEnVentana.showGanadora()
+                GPIO.output(7, GPIO.HIGH)
                 self.estadoActual = 1
             else:
                 self.miRespuestaEnVentana.showCorrecta()
