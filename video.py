@@ -151,13 +151,12 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
             formatoFecha = GUIParalela.valorActual[0:2]+'/'+GUIParalela.valorActual[2:4]+'/'+GUIParalela.valorActual[4:]
         elif longitud>=3:
             formatoFecha = GUIParalela.valorActual[0:2]+'/'+GUIParalela.valorActual[2:]
-        else:
+        elif longitud>=1:
             formatoFecha = GUIParalela.valorActual[0:]
+        else:
+            formatoFecha = ''
         
         self.intro.setText(formatoFecha)
-
-    def borrarTexto(self):
-        self.intro.setText('')
 
     def _mostrarVideo1(self):
         """
@@ -216,15 +215,14 @@ class ThreadClass(QtCore.QThread):
                         print('Signal 2')
                         self.emit(QtCore.SIGNAL('MOSTRAR_VIDEO_2'))
                     GUIParalela.valorActual = ''
-                    self.emit(QtCore.SIGNAL('BORRAR'))
+                    self.emit(QtCore.SIGNAL('ACTUALIZAR'))
                     #self.intro.setText(GUIParalela.valorActual)
                 else:
                     if valor == '#':
-                        GUIParalela.valorActual = ''
-                        self.emit(QtCore.SIGNAL('BORRAR'))
+                        GUIParalela.valorActual = GUIParalela.valorActual[:-1]
                     else:
                         GUIParalela.valorActual+= str(valor)
-                        self.emit(QtCore.SIGNAL('ACTUALIZAR'))
+                    self.emit(QtCore.SIGNAL('ACTUALIZAR'))
                     #self.intro.setText(GUIParalela.valorActual)
                 
                 
