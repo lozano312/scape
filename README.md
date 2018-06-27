@@ -58,3 +58,14 @@ echo "Running at Boot"
 cd /home/pi/trafficFlow/scape/
 python3 video.py Full
 ```
+
+Todas las imagenes y preguntas son intercambiables y agregables
+
+El programa asume que el teclado matricial está conectado en los pines
+
+ROW = [29,31,33,35]
+COL = [37,36,38,40]
+
+Y el relé está en el pin 7, con la numeración de tablero de la raspberry pi como se muestra en la imagen:
+
+![alt text](https://github.com/alvarohurtadobo/scape/blob/master/pinout.png)
