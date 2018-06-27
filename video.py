@@ -39,6 +39,35 @@ class GUIParalela():
         interfaz = InterfazVideo(GUIParalela.myQueue,pantallaTotal=fullScreen)
         sys.exit(app.exec_())
 
+class PopUp(QtGui.QWidget):         #QWidget #QMainWindow
+    """
+    Pop up
+    """
+
+    def __init__(self):
+        #super(InterfazPreguntas, self).__init__(parent)
+        QtGui.QWidget.__init__(self, None, QtCore.Qt.WindowStaysOnTopHint)
+        # Parámetros constantes:
+        self.titulo = 'Revisando'
+        self.etiqueta = QtGui.QLabel('Correcta')
+        self.imagen = QtGui.QLabel(self)
+        self.imagenCorrecta = QtGui.QPixmap('./imagenes/espera.png')
+
+        self.miLayout = QtGui.QVBoxLayout()
+        self.miLayout.addWidget(self.imagen)
+        self.miLayout.addWidget(self.etiqueta)
+        self.setLayout(self.miLayout)
+        self.setWindowTitle(self.titulo)
+        resolution = QtGui.QDesktopWidget().screenGeometry()
+        self.move((resolution.width() / 2) - (self.frameSize().width() / 2),(resolution.height() / 2) - (self.frameSize().height() / 2)) 
+
+    def showEspera(self):
+        self.etiqueta.setText('Veamos .....')
+        self.imagen.setPixmap(self.imagenCorrecta)
+        self.show()
+        QtTest.QTest.qWait(2000)
+        self.hide()
+
 class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
     """
     Interfaz gráfica visual
@@ -53,6 +82,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.video1 = Phonon.VideoPlayer(self)
         self.video2 = Phonon.VideoPlayer(self)
         self.thread.start()
+        self.miPopUp = PopUp()
         
         self.queue = fila
         self.passwords = []
@@ -82,11 +112,10 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         """
         # Parte visual
         self.imagen = QtGui.QLabel(self)
-        self.imagenEspera = QtGui.QLabel(self)
+
         self.pixmapAct = QtGui.QPixmap('./imagenes/logoWeb.png')
-        self.espera = QtGui.QPixmap('./imagenes/pensando.png')
         self.imagen.setPixmap(self.pixmapAct)
-        self.imagenEspera.setPixmap(self.espera)
+
         self.media1 = Phonon.MediaSource('./videos/1.avi')
         self.media2 = Phonon.MediaSource('./videos/2.avi')
 
@@ -95,9 +124,8 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
 
         # Layouts:
         self.layoutVideo1 = QtGui.QVBoxLayout()
-        
+
         self.layoutVideo1.addWidget(self.imagen)
-        self.layoutVideo1.addWidget(self.imagenEspera)
         self.layoutVideo1.addWidget(self.video1)
         self.layoutVideo1.addWidget(self.video2)
         
@@ -187,9 +215,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.imagen.setHidden(True)
         self.video1.setHidden(False)
         self.video1.play()
-        self.imagenEspera.setHidden(False)
-        QtTest.QTest.qWait(1000)
-        self.imagenEspera.setHidden(True)
+        self.miPopUp.showEspera()
         
         
     def _mostrarVideo2(self):
@@ -199,9 +225,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.imagen.setHidden(True)
         self.video2.setHidden(False)
         self.video2.play()
-        self.imagenEspera.setHidden(False)
-        QtTest.QTest.qWait(1000)
-        self.imagenEspera.setHidden(True)
+        self.miPopUp.showEspera()
 
     def _terminoVideo(self):
         self.video1.setHidden(True)

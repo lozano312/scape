@@ -51,7 +51,7 @@ class PopUp(QtGui.QWidget):         #QWidget #QMainWindow
         #super(InterfazPreguntas, self).__init__(parent)
         QtGui.QWidget.__init__(self, None, QtCore.Qt.WindowStaysOnTopHint)
         # Parámetros constantes:
-        self.titulo = ''
+        self.titulo = 'Scape room'
         self.etiqueta = QtGui.QLabel('Correcta')
         self.imagen = QtGui.QLabel(self)
         self.imagenCorrecta = QtGui.QPixmap('./imagenes/correcta.png')
@@ -96,7 +96,7 @@ class InterfazPreguntas(QtGui.QWidget):         #QWidget #QMainWindow
         #super(InterfazPreguntas, self).__init__(parent)
         QtGui.QWidget.__init__(self, None, QtCore.Qt.WindowStaysOnTopHint)
         # Parámetros constantes:
-        self.titulo = 'Scape Room 2'
+        self.titulo = 'Scape Room'
         self.miRespuestaEnVentana = PopUp()
         self.thread = ThreadClass(fila)
 
