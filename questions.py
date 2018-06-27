@@ -57,6 +57,8 @@ class PopUp(QtGui.QWidget):         #QWidget #QMainWindow
         self.miLayout.addWidget(self.etiqueta)
         self.setLayout(self.miLayout)
         self.setWindowTitle(self.titulo)
+        resolution = QtGui.QDesktopWidget().screenGeometry()
+        self.move((resolution.width() / 2) - (self.frameSize().width() / 2),(resolution.height() / 2) - (self.frameSize().height() / 2)) 
 
 class InterfazPreguntas(QtGui.QWidget):         #QWidget #QMainWindow
     """
@@ -200,8 +202,7 @@ class InterfazPreguntas(QtGui.QWidget):         #QWidget #QMainWindow
         #print('Corr: ',self.listaPreguntas[self.estadoActual][2],type(self.listaPreguntas[self.estadoActual][1]))
         if self.intro.text() == self.listaPreguntas[self.estadoActual-1][2]:
             print(' Correcta')
-            self.miRespuestaEnVentana.etiqueta.setText('¡Respuesta Correcta!')
-            self.miRespuestaEnVentana.show()
+            
             self.estadoActual += 1
             if self.estadoActual == self.maximoNuemeroPreguntas+1:
                 self.actualizarLayout(0)
@@ -212,14 +213,17 @@ class InterfazPreguntas(QtGui.QWidget):         #QWidget #QMainWindow
                 self.estadoActual = 1
                 self.actualizarLayout(self.estadoActual)
             else:
+                self.miRespuestaEnVentana.etiqueta.setText('¡Respuesta Correcta!')
+                self.miRespuestaEnVentana.show()
                 self.actualizarLayout(self.estadoActual)
         else:
             print(' Incorrecta')
             self.miRespuestaEnVentana.etiqueta.setText('¡¡Respuesta Incorrecta!!')
             self.miRespuestaEnVentana.show()
+        self.borrarTexto()
         QtTest.QTest.qWait(2000)
         self.miRespuestaEnVentana.hide()
-        self.borrarTexto()
+        
 
     def borrarTexto(self):
         GUIParalela.valorActual = ''
