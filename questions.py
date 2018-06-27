@@ -186,7 +186,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
             if self.estadoActual == self.maximoNuemeroPreguntas+1:
                 self.actualizarLayout(0)
                 GPIO.output(7, GPIO.HIGH)
-                QtCore.QTimer.singleShot(2000)
+                QtCore.QTimer.singleShot(2000,lambda: self.intro.setText(''))
                 GPIO.output(7, GPIO.LOW)
                 self.estadoActual = 1
                 self.actualizarLayout(self.estadoActual)
