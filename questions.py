@@ -187,6 +187,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
                 self.actualizarLayout(0)
                 GPIO.output(7, GPIO.HIGH)
                 self.sleepTimer.singleShot(2000,lambda: self.intro.setText(''))
+                self.sleepTimer.start()
                 GPIO.output(7, GPIO.LOW)
                 self.estadoActual = 1
                 self.actualizarLayout(self.estadoActual)
