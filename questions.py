@@ -105,7 +105,7 @@ class InterfazPreguntas(QtGui.QWidget):         #QWidget #QMainWindow
             readData = f.read()
         for pregunta in readData.split('\n'):
             valores = pregunta.split(';')
-            if len(valores) ==3:
+            if len(valores) ==4:
                 self.listaPreguntas.append(valores)
                 #print('Agregado: ',self.listaPreguntas[-1])
         #print('Total: ',self.listaPreguntas)
@@ -119,6 +119,7 @@ class InterfazPreguntas(QtGui.QWidget):         #QWidget #QMainWindow
         self.connect(self.thread,QtCore.SIGNAL("BORRAR"),self.borrarTexto)
         self.connect(self.thread,QtCore.SIGNAL("REVISAR"),self.revisarRespuesta)
         self.intro.returnPressed.connect(self.revisarRespuesta)
+        
 
         # Al inicializarse la clase se muestra:
         if pantallaTotal:
@@ -184,6 +185,7 @@ class InterfazPreguntas(QtGui.QWidget):         #QWidget #QMainWindow
             self.pixmapAct = QtGui.QPixmap('./database/{}.png'.format(self.listaPreguntas[estado-1][0]))
             self.imagen.setPixmap(self.pixmapAct)
             self.pregunta.setText(self.listaPreguntas[estado-1][1])
+        self.setStyleSheet("background-color:{};".format(self.listaPreguntas[estado-1][3]));
         #self.setLayout(self.layoutTotalHorizontal)
         
     def displayOverlay(self):
