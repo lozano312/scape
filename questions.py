@@ -58,7 +58,7 @@ class PopUp(QtGui.QWidget):         #QWidget #QMainWindow
         self.imagenIncorrecta = QtGui.QPixmap('./imagenes/incorrecta.png')
         self.imagenGanadora = QtGui.QPixmap('./imagenes/ganadora.png')
 
-        self.miLayout = QtGui.QHBoxLayout()
+        self.miLayout = QtGui.QVBoxLayout()
         self.miLayout.addWidget(self.imagen)
         self.miLayout.addWidget(self.etiqueta)
         self.setLayout(self.miLayout)
