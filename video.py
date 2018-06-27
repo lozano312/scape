@@ -53,10 +53,7 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.video1 = Phonon.VideoPlayer(self)
         self.video2 = Phonon.VideoPlayer(self)
         self.thread.start()
-        self.connect(self.thread,QtCore.SIGNAL('REVISAR'),self.revisarRespuesta)
-        self.connect(self.video1,QtCore.SIGNAL("finished()"),self._terminoVideo)
-        self.connect(self.video2,QtCore.SIGNAL("finished()"),self._terminoVideo)
-        self.connect(self.thread,QtCore.SIGNAL("ACTUALIZAR"),self.actualizarTexto)
+
         self.intro.returnPressed.connect(self.revisarRespuesta)
         self.queue = fila
         self.passwords = []
@@ -67,6 +64,10 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
                 self.passwords.append(password) 
         # Clases auxiliares: 
         self.initUI()
+        self.connect(self.thread,QtCore.SIGNAL('REVISAR'),self.revisarRespuesta)
+        self.connect(self.video1,QtCore.SIGNAL("finished()"),self._terminoVideo)
+        self.connect(self.video2,QtCore.SIGNAL("finished()"),self._terminoVideo)
+        self.connect(self.thread,QtCore.SIGNAL("ACTUALIZAR"),self.actualizarTexto)
         # Al inicializarse la clase se muestra:
         if pantallaTotal:
             self.showFullScreen()
