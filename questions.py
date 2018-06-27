@@ -51,14 +51,41 @@ class PopUp(QtGui.QWidget):         #QWidget #QMainWindow
         #super(InterfazPreguntas, self).__init__(parent)
         QtGui.QWidget.__init__(self, None, QtCore.Qt.WindowStaysOnTopHint)
         # Parámetros constantes:
-        self.titulo = 'Respuesta...'
+        self.titulo = ''
         self.etiqueta = QtGui.QLabel('Correcta')
+        self.imagen = QtGui.QLabel(self)
+        self.imagenCorrecta = QtGui.QPixmap('./imagenes/correcta.png')
+        self.imagenIncorrecta = QtGui.QPixmap('./imagenes/incorrecta.png')
+        self.imagenGanadora = QtGui.QPixmap('./imagenes/ganadora.png')
+
         self.miLayout = QtGui.QHBoxLayout()
+        self.miLayout.addWidget(self.imagen)
         self.miLayout.addWidget(self.etiqueta)
         self.setLayout(self.miLayout)
         self.setWindowTitle(self.titulo)
         resolution = QtGui.QDesktopWidget().screenGeometry()
         self.move((resolution.width() / 2) - (self.frameSize().width() / 2),(resolution.height() / 2) - (self.frameSize().height() / 2)) 
+
+    def showCorrecta(self):
+        self.etiqueta.setText('¡¡Respuesta Correcta!!')
+        self.imagen.setPixmap(self.imagenCorrecta)
+        self.show()
+        QtTest.QTest.qWait(2000)
+        self.hide()
+
+    def showIncorrecta(self):
+        self.etiqueta.setText('¡¡Respuesta Incorrecta!!')
+        self.imagen.setPixmap(self.imagenIncorrecta)
+        self.show()
+        QtTest.QTest.qWait(2000)
+        self.hide()
+
+    def showGanadora(self):
+        self.etiqueta.setText('Respuesta Correcta')
+        self.imagen.setPixmap(self.imagenGanadora)
+        self.show()
+        QtTest.QTest.qWait(10000)
+        self.hide()
 
 class InterfazPreguntas(QtGui.QWidget):         #QWidget #QMainWindow
     """
@@ -202,28 +229,20 @@ class InterfazPreguntas(QtGui.QWidget):         #QWidget #QMainWindow
         #print('Corr: ',self.listaPreguntas[self.estadoActual][2],type(self.listaPreguntas[self.estadoActual][1]))
         if self.intro.text() == self.listaPreguntas[self.estadoActual-1][2]:
             print(' Correcta')
-            
             self.estadoActual += 1
             if self.estadoActual == self.maximoNuemeroPreguntas+1:
-                self.actualizarLayout(0)
                 GPIO.output(7, GPIO.HIGH)
-                self.borrarTexto()
-                QtTest.QTest.qWait(10000)
+                self.miRespuestaEnVentana.showGanadora()
                 GPIO.output(7, GPIO.LOW)
                 self.estadoActual = 1
-                self.actualizarLayout(self.estadoActual)
             else:
-                self.miRespuestaEnVentana.etiqueta.setText('¡Respuesta Correcta!')
-                self.miRespuestaEnVentana.show()
-                self.actualizarLayout(self.estadoActual)
+                self.miRespuestaEnVentana.showCorrecta()
+            self.actualizarLayout(self.estadoActual)
         else:
             print(' Incorrecta')
-            self.miRespuestaEnVentana.etiqueta.setText('¡¡Respuesta Incorrecta!!')
-            self.miRespuestaEnVentana.show()
+            self.miRespuestaEnVentana.showIncorrecta()
+            
         self.borrarTexto()
-        QtTest.QTest.qWait(2000)
-        self.miRespuestaEnVentana.hide()
-        
 
     def borrarTexto(self):
         GUIParalela.valorActual = ''
