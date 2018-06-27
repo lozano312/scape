@@ -152,7 +152,8 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         
         
     def revisarRespuesta(self):
-        if self.intro.text() in self.passwords:
+        textoSinSimbolo = self.intro.text().replace('/','')
+        if textoSinSimbolo in self.passwords:
             print('Signal 1')
             self._mostrarVideo1()
         else:
