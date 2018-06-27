@@ -178,18 +178,16 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         """
         Despliega el video 1
         """
-        self.video1.setHidden(False)
         self.imagen.setHidden(True)
-        
+        self.video1.setHidden(False)
         self.video1.play()
         
     def _mostrarVideo2(self):
         """
         Despliega el video 2
         """
-        self.video2.setHidden(False)
         self.imagen.setHidden(True)
-        
+        self.video2.setHidden(False)
         self.video2.play()
 
     def _terminoVideo(self):
