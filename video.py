@@ -54,7 +54,8 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         self.thread.start()
         self.connect(self.thread,QtCore.SIGNAL('MOSTRAR_VIDEO_1'),self._mostrarVideo1)
         self.connect(self.thread,QtCore.SIGNAL('MOSTRAR_VIDEO_2'),self._mostrarVideo2)
-        self.connect(self.video,QtCore.SIGNAL("finished()"),self._terminoVideo)
+        self.connect(self.video1,QtCore.SIGNAL("finished()"),self._terminoVideo)
+        self.connect(self.video2,QtCore.SIGNAL("finished()"),self._terminoVideo)
         self.connect(self.thread,QtCore.SIGNAL("ACTUALIZAR"),self.actualizarTexto)
         self.connect(self.thread,QtCore.SIGNAL("BORRAR"),self.borrarTexto)
 
