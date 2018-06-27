@@ -53,6 +53,9 @@ class PopUp(QtGui.QWidget):         #QWidget #QMainWindow
         # Parámetros constantes:
         self.titulo = 'Respuesta...'
         self.etiqueta = 'Correcta'
+        self.miLayout = QtGui.QHBoxLayout()
+        self.miLayout.addWidget(self.etiqueta)
+        self.setLayout(self.miLayout)
         self.setWindowTitle(self.titulo)
 
 class InterfazPreguntas(QtGui.QWidget):         #QWidget #QMainWindow
@@ -197,7 +200,7 @@ class InterfazPreguntas(QtGui.QWidget):         #QWidget #QMainWindow
         #print('Corr: ',self.listaPreguntas[self.estadoActual][2],type(self.listaPreguntas[self.estadoActual][1]))
         if self.intro.text() == self.listaPreguntas[self.estadoActual-1][2]:
             print(' Correcta')
-            self.miRespuestaEnVentana.etiqueta = 'Correcta!!'
+            self.miRespuestaEnVentana.etiqueta = 'Respuesta Correcta!'
             self.miRespuestaEnVentana.show()
             self.estadoActual += 1
             if self.estadoActual == self.maximoNuemeroPreguntas+1:
@@ -212,7 +215,7 @@ class InterfazPreguntas(QtGui.QWidget):         #QWidget #QMainWindow
                 self.actualizarLayout(self.estadoActual)
         else:
             print(' Incorrecta')
-            self.miRespuestaEnVentana.etiqueta = 'Incorrecta!!'
+            self.miRespuestaEnVentana.etiqueta = 'Respuesta Incorrecta!!'
             self.miRespuestaEnVentana.show()
         QtTest.QTest.qWait(2000)
         self.miRespuestaEnVentana.hide()
