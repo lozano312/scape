@@ -160,6 +160,10 @@ class InterfazVideo(QtGui.QWidget):         #QWidget #QMainWindow
         else:
             print('Signal 2')
             self._mostrarVideo2()
+        self.borrarTexto()
+
+    def borrarTexto(self):
+        GUIParalela.valorActual = ''
         self.intro.setText('')
 
     def displayOverlay(self):
@@ -255,8 +259,7 @@ class ThreadClass(QtCore.QThread):
                 if valor == '*':
                     self.emit(QtCore.SIGNAL('REVISAR'))
                     print('Introducido: ',GUIParalela.valorActual)
-                    GUIParalela.valorActual = ''
-                    self.emit(QtCore.SIGNAL('ACTUALIZAR'))
+
                     #self.intro.setText(GUIParalela.valorActual)
                 else:
                     if valor == '#':
